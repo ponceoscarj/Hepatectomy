@@ -270,7 +270,7 @@ plotmd_single_studies <- function(words, numbers, nstudies, sizebox,
 ```
 
 RLDRH vs LADRH -> blood loss
-```{r blood_loss_1, fig.height=5, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+```{r blood_loss_1, fig.height=5, fig.width=12, echo=FALSE, message=FALSE, warning=FALSE}
 blood <- subset(h1, outcome=='blood loss')
 blood1 <- subset(blood, comparison=='LADRH')
 
@@ -292,7 +292,7 @@ plot <- plotmd_single_studies(words = tblood1$b,
 
 
 RLDRH vs ODRH -> blood loss
-```{r blood_loss_2, fig.height=5, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+```{r blood_loss_2, fig.asp=1 ,fig.height=1, fig.width=10, echo=FALSE, message=FALSE, warning=FALSE}
 blood <- subset(h1, outcome=='blood loss')
 
 blood2 <- subset(blood, comparison=='ODRH')
