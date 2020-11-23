@@ -1,0 +1,366 @@
+---
+title: "Hepatectomy"
+author: "Oscar J. Ponce & Eddy Lincango"
+date: "18/11/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dpi=900)
+knitr::opts_chunk$set(dev='svg')
+
+library(webshot)
+library(metafor)
+library(tidyverse)
+library(rmarkdown)
+library(magrittr)
+library(grid)
+library(gt)
+library(forestplot)
+library(glue)
+library(Gmisc)
+library(Matrix)
+
+```
+
+
+```{r cleaning, echo=FALSE, message=FALSE, warning=FALSE}
+#continuous donor
+h <- read.csv("6 Extracted Data/outcome_continuous_donor.csv")
+
+
+h1<-h[!(h$analysis=='no'),]
+
+names(h1)[6] <- "outcome"
+names(h1)[11] <- 'n1'
+names(h1)[12] <- 'n2'
+names(h1)[13] <- 'mean_post1'
+names(h1)[14] <- 'sd_post1'
+names(h1)[15] <- 'mean_post2'
+names(h1)[16] <- 'sd_post2'
+
+h1[11:16] <- sapply(h1[11:16],as.numeric)
+
+h1$outcome[h1$outcome == 'Estimated blodd loss'] <- 'blood loss'
+h1$outcome[h1$outcome == 'Estimated blood loss'] <- 'blood loss'
+
+h1$intervention[h1$intervention == 'RlDRH'] <- 'RLDRH'
+
+h1$author <- 
+  ifelse(h1$refid==9, paste("Rho et al., 2020"),
+  ifelse(h1$refid==27, paste("Broering et al., 2020"),
+  ifelse(h1$refid==5, paste("Binoj et al., 2020"),
+  ifelse(h1$refid==172, paste("Chen et al., 2016"),
+  ifelse(h1$refid==74, paste("Cheah et al., 2019"),
+  ifelse(h1$refid==239, paste("Martucci et al., 2013"),
+  ifelse(h1$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
+
+#h1[h1$outcome == 'Liver funcion', c(1:3,5,6,7,11:16)]
+
+```
+
+
+```{r functions, echo=FALSE, message=FALSE, warning=FALSE}
+##functions for mean differences
+md <- function(database){
+  db <- database
+  db <- escalc(measure="MD", 
+               m1i=mean_post1, m2i = mean_post2, 
+               sd1i  = sd_post1, sd2i = sd_post2, 
+               n1i = n1, n2i= n2, data=database)
+  db$vi <- ifelse(is.na(db$vi), 
+               ((db$mdul_post-db$mdll_post)/((2*abs(qt(0.05/2, db$total-1)))^2)), db$vi)
+  db <- db[order(db$yi),]
+  db <- summary(db)
+  
+  db$md <- paste(formatC(db$yi, format='f', digits =1)," ",
+                 "(",formatC(db$ci.lb, format='f', digits =1),
+                 ",",formatC(db$ci.ub, format='f', digits=1),")")  
+  
+  ma <- rma(yi, vi, measure='MD', data=db, method='REML')
+
+  list(pre = db, ma = ma)
+}
+
+table_md <- function(analysis, nstudies, int, comp, outcome, col){
+  ifelse(nstudies != 1 ,
+  (b <- cbind( 
+    c("Author", analysis$pre$author, 
+      paste("Overall Mean Difference for", analysis$ma$k, "studies","\n", 
+            "(Tau^2 = ", (formatC(analysis$ma$tau2, digits=2, format="f")), ", df = ", 
+            (analysis$ma$k - analysis$ma$p),
+            ", p ", (ifelse(analysis$ma$QEp < 0.001, 
+                            paste("< 0.001"),
+                            paste("= ", formatC(analysis$ma$QEp, digits=3, format="f")))),
+            "; ", "I^2", " = ", (formatC(analysis$ma$I2, digits=1, format="f")), "%)")),
+    c(paste(int), analysis$pre$n1, sum(analysis$pre$n1)),
+    c(paste(outcome, '\n', col), paste(formatC(analysis$pre$mean_post1, format='f', digits=1),'(',
+                         formatC(analysis$pre$sd_post1, format='f', digits=1),')'), NA),
+    c(paste(comp), analysis$pre$n2,sum(analysis$pre$n2)),
+    c(paste(outcome, '\n', col), paste(formatC(analysis$pre$mean_post2, format='f', digits=1),'(',
+                         formatC(analysis$pre$sd_post2, format='f', digits=1),')'), NA),
+    c("Mean Difference (95% CI)", analysis$pre$md, 
+      paste(formatC(analysis$ma$b, format='f', digits =1), 
+            " (",formatC(analysis$ma$ci.lb, format='f', digits=1),
+            ",", formatC(analysis$ma$ci.ub, format='f', digits=1), ")")),
+    c("Weight(%)", paste(formatC(weights(analysis$ma), format='f', digits = 1),'%'), NA))),
+   (b <- cbind( 
+    c("Author", analysis$pre$author),
+    c(paste(int), analysis$pre$n1),
+    c(paste(outcome,'\n', col), paste(formatC(analysis$pre$mean_post1, format='f', digits=1),'(',
+                         formatC(analysis$pre$sd_post1, format='f', digits=1),')')),
+    c(paste(comp), analysis$pre$n2),
+    c(paste(outcome, '\n',col), paste(formatC(analysis$pre$mean_post2, format='f', digits=1),'(',
+                         formatC(analysis$pre$sd_post2, format='f', digits=1),')')),
+    c("Mean Difference (95% CI)", analysis$pre$md),
+    c("Weight(%)", paste(formatC(weights(analysis$ma), format='f', digits = 1),'%')))))
+  
+  b <- rbind(b, NA) 
+  b <- as_tibble(b, .name_repair = "unique")
+  b <- b %>% add_row(.before = 2)
+  b <- b %>% add_row(.before = (nrow(b)-1)) 
+  ifelse(nstudies != 1 , (b <- b %>% add_row(.before = 2)), NA)
+  
+  ifelse(nstudies != 1,
+  (c <- structure(list(
+    mean = c(NA,  NA, NA,  analysis$pre$yi, NA, analysis$ma$b, NA),
+    lower = c(NA, NA, NA,  analysis$pre$ci.lb, NA, analysis$ma$ci.lb, NA),
+    upper = c(NA, NA, NA,  analysis$pre$ci.ub, NA, analysis$ma$ci.ub, NA)),
+    .Names = c("mean", "lower", "upper"),
+    row.names = c(NA, (-1L*nrow(b))),
+    class = "data.frame")),
+  (c <- structure(list(
+    mean = c(NA,  NA, NA, analysis$pre$yi, NA),
+    lower = c(NA,  NA, NA, analysis$pre$ci.lb, NA),
+    upper = c(NA,  NA, NA, analysis$pre$ci.ub, NA)),
+    .Names = c("mean", "lower", "upper"),
+    row.names = c(NA, (-1L*nrow(b))),
+    class = "data.frame")))
+
+  list(b = b, c = c)
+  
+}
+
+
+
+##functions for relative risk
+
+rr <- function(database){
+  db <- database
+  db <- escalc(measure="RR", ai=e1, ci=e2, n1i=n1, n2i=n2,data=database)
+  db <- db[order(db$yi),]
+  db <- summary(db)
+  
+  db$est <-  exp(db$yi)
+  db$ci.lb <- exp(db$ci.lb)
+  db$ci.ub <- exp(db$ci.ub)
+  
+  
+  db$rate1 <- paste(db$e1,"/",db$n1)
+  db$rate2 <- paste(db$e2,"/",db$n2)
+  db$rr <- paste(formatC(db$est, format='f', digits =2)," ",
+                 "(",formatC(db$ci.lb, format='f', digits =2),
+                 "-",formatC(db$ci.ub, format='f', digits=2),")")  
+  
+  ma <- rma(db$yi, db$vi, measure='RR', data=db, method='REML')
+  exp <- predict(ma, transf = transf.exp.int)
+  
+  list(pre = db, ma = ma, exp = exp)
+}
+
+table_rr <- function(e1, n1, e2, n2, analysis){
+  b <- cbind( 
+    c("Author", analysis$pre$author, 
+      paste("Overall Relative Risk for", analysis$ma$k, "studies","\n", 
+            "(Tau^2 = ", (formatC(analysis$ma$tau2, digits=2, format="f")), ", df = ", 
+            (analysis$ma$k - analysis$ma$p),
+            ", p ", (ifelse(analysis$ma$QEp < 0.001, 
+                            paste("< 0.001"),
+                            paste("= ", formatC(analysis$ma$QEp, digits=3, format="f")))),
+            "; ", "I^2", " = ", (formatC(analysis$ma$I2, digits=1, format="f")), "%)")),
+    c("Canal wall up (n/N)",analysis$pre$rate1, paste(sum(e1), " / ",
+                                                      sum(n1))),
+    c("Canal wall down (n/N)",analysis$pre$rate2, paste(sum(e2), " / ",
+                                                        sum(n2))),
+    c("Relative Risk (95% CI)", analysis$pre$rr, 
+      paste(formatC(analysis$exp$pred, format='f', digits =2), 
+            " (",formatC(analysis$exp$ci.lb, format='f', digits=2),
+            "-", formatC(analysis$exp$ci.ub, format='f', digits=2), ")")),
+    c("Weight(%)", paste(formatC(weights(analysis$ma), format='f', digits = 1),'%'), NA))
+  
+  b <- rbind(b, NA)
+  b <- as_tibble(b, .name_repair = "unique")
+  b <- b %>% add_row(.before = 2)
+  b <- b %>% add_row(.before = (nrow(b)-1))
+  
+  c <- structure(list(
+    mean = c(NA, NA, analysis$pre$est, NA, analysis$exp$pred, NA),
+    lower = c(NA, NA,  analysis$pre$ci.lb, NA, analysis$exp$ci.lb, NA),
+    upper = c(NA, NA,  analysis$pre$ci.ub, NA, analysis$exp$ci.ub, NA)),
+    .Names = c("mean", "lower", "upper"),
+    row.names = c(NA, (-1L*nrow(b))),
+    class = "data.frame")
+  
+  
+  list(b = b, c = c)
+  
+}
+
+##function for individual plots
+
+
+plotmd_single_studies <- function(words, numbers, nstudies, sizebox, 
+                                  box_ma_results, overall_box,
+                                  xtick){
+  ifelse(nstudies != 1, 
+  (box_size <- (sizebox*(weights(box_ma_results)+50))), NA)
+  
+  ifelse(nstudies != 1, 
+  (forestplot(words,
+             graph.pos = ncol(words)-1,
+             zero = 0,
+             numbers,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:(ncol(words)+1)), col="black")),
+             lineheight=unit(0.5,'cm'),
+             boxsize = c(NA, NA, NA, box_size, NA, overall_box, NA),
+             line.margin = 2,
+             is.summary = c(T, rep(F, nrow(words)-3), T, F),
+             align = c("l",rep('c', 4),  "l", "l"),
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.8), 
+                              ticks = gpar(cex = 0.8, fontface="bold"),
+                              summary = gpar(cex = 0.8),
+                              xlab = gpar(cex=0.8)),
+             xticks = xtick,
+             xlog=FALSE,
+             clip = c(-10, 10),
+             grid = FALSE,
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", axes="grey20", summary="black"))),
+  (forestplot(words,
+             graph.pos = ncol(words)-1,
+             zero = 0,
+             numbers,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:(ncol(words)+1)), col="black")),
+             lineheight=unit(0.5,'cm'),
+             boxsize = c(NA, NA, NA, overall_box, NA),
+             line.margin = 2,
+             is.summary = c(T, rep(F, nrow(words)-3), T, F),
+             align = c("l",rep('c', 4),  "l", "l"),
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.8), 
+                              ticks = gpar(cex = 0.8, fontface="bold"),
+                              summary = gpar(cex = 0.8),
+                              xlab = gpar(cex=0.8)),
+             xticks = xtick,
+             xlog=FALSE,
+             clip = c(0,0.4),
+             grid = FALSE,
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", axes="grey20", summary="black"))))
+}
+```
+
+RLDRH vs LADRH -> blood loss
+```{r blood_loss_1, fig.height=5, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+blood <- subset(h1, outcome=='blood loss')
+blood1 <- subset(blood, comparison=='LADRH')
+
+blood1_md <- md(blood1)
+
+tblood1 <- table_md(analysis = blood1_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "LADRH (n)",
+                    outcome = 'Blood loss (mL)', col = 'Mean (SD)')
+
+plot <- plotmd_single_studies(words = tblood1$b,
+                      numbers = tblood1$c,
+                      overall_box = 1,
+                      nstudies = 1,
+                      xtick = c(-250, -150, -50,0))
+
+
+
+```
+
+
+RLDRH vs ODRH -> blood loss
+```{r blood_loss_2, fig.height=5, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+blood <- subset(h1, outcome=='blood loss')
+
+blood2 <- subset(blood, comparison=='ODRH')
+
+blood2_md <- md(blood2)
+
+tblood2 <- table_md(analysis = blood2_md, nstudies = 4, 
+                    int = "ODRH (n)", comp = "LADRH (n)",
+                    outcome = 'Blood Loss (mL)', col = 'Mean (SD)')
+
+
+plot <- plotmd_single_studies(words = tblood2$b,
+                      numbers = tblood2$c,
+                      sizebox = 0.005,
+                      box_ma_results = blood2_md$ma,
+                      overall_box = 1,
+                      nstudies = 3,
+                      xtick = c(-250, -150, -50, 0, 50, 150, 250))
+
+```
+
+
+RLDRH vs LADRH -> length of stay
+```{r hospital1, fig.height=5, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+hospital <- subset(h1, outcome=='Hospital stay')
+
+hospital1 <- subset(hospital, comparison=='LADRH')
+
+hospital1_md <- md(hospital1)
+
+thospital1 <- table_md(analysis = hospital1_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "LADRH (n)",
+                    outcome = 'Length of stay (days)', col = 'Mean (SD)')
+
+
+plot <- plotmd_single_studies(words = thospital1$b,
+                      numbers = thospital1$c,
+                      overall_box = 1,
+                      nstudies = 1,
+                      xtick = c(-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2))
+  
+```
+
+
+RLDRH vs ODRH -> length of stay
+```{r hospital2, fig.height=5, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+hospital <- subset(h1, outcome=='Hospital stay')
+
+hospital2 <- subset(hospital, comparison=='ODRH')
+
+hospital2_md <- md(hospital2)
+
+thospital2 <- table_md(analysis = hospital2_md, nstudies = 3, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Length of stay (days)', col = 'Mean (SD)')
+
+
+
+plot <- plotmd_single_studies(words = thospital2$b,
+                      numbers = thospital2$c,
+                      sizebox = 0.005,
+                      box_ma_results = hospital2_md$ma,
+                      overall_box = 1,
+                      nstudies = 3,
+                      xtick = c(-3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1))
+
+#blood1[, c(1:3,5,6,7,11:16)]
+
+```
+
+
