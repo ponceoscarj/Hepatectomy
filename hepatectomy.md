@@ -212,3 +212,47 @@ after RLDRH vs ODRH</summary>
 ![](hepatectomy_files/figure-gfm/operativetime2-1.svg)<!-- -->
 
 </details>
+
+### Figure 16
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications I-II
+after RLDRH vs LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/LADRH_complication1-1.svg)<!-- -->
+
+</details>
+
+### Figure 17
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications III-IV
+after RLDRH vs LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/LADRH_complication2-1.svg)<!-- -->
+
+</details>
+
+### Figure 18
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications I-II
+after RLDRH vs ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/ODRH_complication1-1.svg)<!-- -->
+
+</details>
+
+### Figure 19
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications I-II
+after RLDRH vs ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/ODRH_complication2-1.svg)<!-- -->
+
+</details>

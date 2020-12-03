@@ -24,7 +24,7 @@ library(Matrix)
 ```
 
 
-```{r cleaning, echo=FALSE, message=FALSE, warning=FALSE}
+```{r cleaning_continuous_donor, echo=FALSE, message=FALSE, warning=FALSE}
 #continuous donor
 h <- read.csv("6 Extracted Data/outcome_continuous_donor.csv")
 
@@ -61,7 +61,7 @@ h1$author <-
 ```
 
 
-```{r functions_md, echo=FALSE, message=FALSE, warning=FALSE}
+```{r functions_md_rr, echo=FALSE, message=FALSE, warning=FALSE}
 md <- function(database){
   
   db <- database
@@ -156,10 +156,9 @@ table_md <- function(analysis, nstudies, int, comp, outcome, col,
 
 
 
-plotmd_single_studies <- function(words, numbers, nstudies,  
+plotmd_single_studies <- function(words, numbers,  
                                   xtick, sizes, bolding, aligning, fpPosition) {
 
-  ifelse(nstudies != 1, 
   (forestplot(words,
              graph.pos = fpPosition,
              zero = 0,
@@ -185,34 +184,141 @@ plotmd_single_studies <- function(words, numbers, nstudies,
              lwd.ci = 2.2,
              lwd.zero = 1.5,
              graphwidth = unit(10,"cm"),
-             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))),
-  (forestplot(words,
-             graph.pos = fpPosition,
-             zero = 0,
-             numbers,
-             new_page = TRUE,
-             colgap = unit(5, "mm"),
-             hrzl_lines = list('3' = gpar (lwd=1, columns=c(1:(ncol(words)+1)), col="black")),
-             lineheight=unit(0.7,'cm'),
-             boxsize = sizes,
-             line.margin = 2,
-             is.summary = bolding,
-             align = aligning,
-             ci.vertices = TRUE,
-             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
-                              ticks = gpar(cex = 0.9, fontface="bold"),
-                              summary = gpar(cex = 0.9),
-                              xlab = gpar(cex=0.9)),
-             xticks = xtick,
-             xlog=FALSE,
-             clip = c(0,1),
-             grid = xtick,
-             lwd.xaxis = 1,
-             lwd.ci = 2.2,
-             lwd.zero = 1.5,
-             graphwidth = unit(10,"cm"),
-             col=fpColors(box="black",line="grey", zero = 'dodgerblue4',axes="grey20", summary="black"))))
+             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black")))
+ 
 }
+
+
+
+
+
+
+
+
+rr <- function(database){
+  db <- database
+  db <- escalc(measure="RR", ai=e1, ci=e2, n1i=n1, n2i=n2,data=database)
+  db <- db[order(db$yi),]
+  db <- summary(db)
+  
+  db$est <-  exp(db$yi)
+  db$ci.lb <- exp(db$ci.lb)
+  db$ci.ub <- exp(db$ci.ub)
+  
+  
+  db$rate1 <- paste(db$e1,"/",db$n1)
+  db$rate2 <- paste(db$e2,"/",db$n2)
+  db$rr <- paste(formatC(db$est, format='f', digits =2)," ",
+                 "(",formatC(db$ci.lb, format='f', digits =2),
+                 "-",formatC(db$ci.ub, format='f', digits=2),")")  
+  
+  ma <- rma(db$yi, db$vi, measure='RR', data=db, method='REML')
+  exp <- predict(ma, transf = transf.exp.int)
+  
+  db$weights <- weights(ma)
+  db$w <- paste(formatC(db$weights, format='f', digits = 1),'%')
+  
+  
+  list(pre = db, ma = ma, exp = exp)
+}
+
+
+
+table_rr <- function(analysis, int, comp, outcome, nstudies){
+  ifelse(nstudies>1,
+  b <- cbind( 
+    c("Author", analysis$pre$author, 
+      paste("Overall Relative Risk for", analysis$ma$k, "studies","\n", 
+            "(Tau^2 = ", (formatC(analysis$ma$tau2, digits=2, format="f")), ", df = ", 
+            (analysis$ma$k - analysis$ma$p),
+            ", p ", (ifelse(analysis$ma$QEp < 0.001, 
+                            paste("< 0.001"),
+                            paste("= ", formatC(analysis$ma$QEp, digits=3, format="f")))),
+            "; ", "I^2", " = ", (formatC(analysis$ma$I2, digits=1, format="f")), "%)")),
+    c(paste(int, '\n', outcome,'/','total n'),analysis$pre$rate1, paste(sum(analysis$pre$e1), " / ",
+                                                      sum(analysis$pre$n1))),
+    c(paste(comp, '\n', outcome,'/', 'total n'),analysis$pre$rate2, paste(sum(analysis$pre$e2), " / ",
+                                                        sum(analysis$pre$n2))),
+    c("Relative Risk (95% CI)", analysis$pre$rr, 
+      paste(formatC(analysis$exp$pred, format='f', digits =2), 
+            " (",formatC(analysis$exp$ci.lb, format='f', digits=2),
+            "-", formatC(analysis$exp$ci.ub, format='f', digits=2), ")")),
+    c("Weight(%)", paste(formatC(weights(analysis$ma), format='f', digits = 1),'%'), NA)),
+       b <- cbind( 
+        c("Author", analysis$pre$author),
+        c(paste(int, '\n', outcome,'/','total n'),analysis$pre$rate1),
+        c(paste(comp, '\n', outcome,'/', 'total n'),analysis$pre$rate2),
+        c("Relative Risk (95% CI)", analysis$pre$rr)))
+  
+  b <- as_tibble(b, .name_repair = "unique")
+  b <- b %>% add_row(.before = 2)
+  b <- b %>% add_row(.before = 2)
+  b <- b %>% add_row(.after = nrow(b))  
+  
+  ifelse(nstudies>1, b <- b %>% add_row(.before = nrow(b)-1), NA)
+
+  
+  ifelse(nstudies > 1,
+        (c <- structure(list(
+          mean = c(rep(NA, 3), analysis$pre$est, NA, analysis$exp$pred,NA),
+          lower = c(rep(NA, 3), analysis$pre$ci.lb, NA, analysis$exp$ci.lb, NA),
+          upper = c(rep(NA, 3), analysis$pre$ci.ub, NA, analysis$exp$ci.ub, NA)),
+          .Names = c("mean", "lower", "upper"),
+          row.names = c(NA, -1L*nrow(b)),
+          class = "data.frame")),
+        (c <- structure(list(
+          mean = c(rep(NA, 3), analysis$pre$est, NA),
+          lower = c(rep(NA, 3), analysis$pre$ci.lb, NA),
+          upper = c(rep(NA, 3), analysis$pre$ci.ub, NA)),
+          .Names = c("mean", "lower", "upper"),
+          row.names = c(NA, -1L*nrow(b)),
+          class = "data.frame")))
+
+  c <- as_tibble(c)
+  
+  list(b = b, c = c)
+} 
+  
+  
+  
+
+
+
+
+plotrr_single_studies <- function(words, numbers, xtick, sizes, 
+                                  bolding, aligning, fpPosition){
+  
+  forestplot(words,
+             graph.pos = fpPosition,
+             zero = 1,
+             numbers,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:(ncol(words)+1)), col="black")),
+             lineheight=unit(0.7,'cm'),
+             boxsize = sizes,
+             line.margin = 2,
+             is.summary = bolding,
+             align = aligning,
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
+                              ticks = gpar(cex = 0.9, fontface="bold"),
+                              summary = gpar(cex = 0.9),
+                              xlab = gpar(cex=0.9)),
+             xticks = xtick,
+             xlog=TRUE,
+             clip = c(0.2, 32),
+             grid = xtick,
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             lwd.zero = 2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
+  
+  
+}  
+
+
 ```
 
 
@@ -236,7 +342,6 @@ tblood1 <- table_md(analysis = blood1_md, nstudies = 1,
 
 plot <- plotmd_single_studies(words = tblood1$b,
                       numbers = tblood1$c,
-                      nstudies = 1,
                       fpPosition = ncol(tblood1$b),
                       xtick = c(-250, -150, -50,0, 50, 150), 
                       sizes = c(rep(NA,3), 1, NA),
@@ -264,7 +369,6 @@ tblood2 <- table_md(analysis = blood2_md, nstudies = 4,
 
 plot <- plotmd_single_studies(words = tblood2$b,
                       numbers = tblood2$c,
-                      nstudies = 3,
                       fpPosition = ncol(tblood2$b)-1,
                       xtick = c(-250, -150, -50, 0, 50, 150, 250), 
                       sizes = c(rep(NA,3), 0.011*(blood2_md$pre$weights+50), NA, 1,NA),
@@ -294,7 +398,6 @@ thospital1 <- table_md(analysis = hospital1_md, nstudies = 1,
 
 plot <- plotmd_single_studies(words = thospital1$b,
                       numbers = thospital1$c,
-                      nstudies = 1,
                       fpPosition = ncol(thospital1$b),
                       xtick = c(-2, -1,  0,  1, 2),
                       sizes = c(rep(NA,3), 1, NA),
@@ -303,8 +406,6 @@ plot <- plotmd_single_studies(words = thospital1$b,
   
 
 ```
-
-
 </details>
 
 
@@ -325,7 +426,6 @@ thospital2 <- table_md(analysis = hospital2_md, nstudies = 3,
 
 plot <- plotmd_single_studies(words = thospital2$b,
                       numbers = thospital2$c,
-                      nstudies = 3,
                       fpPosition = ncol(thospital2$b)-1,
                       xtick = c(-3, -2, -1, -0.5, 0, 0.5, 1, 2),
                       sizes = c(rep(NA,3), 0.011*(hospital2_md$pre$weights+50), NA, 1,NA),
@@ -393,7 +493,6 @@ c <- structure(list(
 
 plot <- plotmd_single_studies(words = b, 
                               numbers = c, 
-                              nstudies = 3, 
                               fpPosition = ncol(b),
                       xtick = c(-2, -1, -0.5, 0, 0.5, 1, 2),
                       sizes = c(rep(NA,3), rep(c(1,NA),3)),
@@ -482,7 +581,6 @@ c <- c %>% add_row( .before = 7)
 
 plot <- plotmd_single_studies(words = b,
                       numbers = c,
-                      nstudies = 1,
                       fpPosition = ncol(b)-1,
                       xtick = c(-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2),
                       sizes = c(rep(NA,3), rep(c(0.8, NA), 3)),
@@ -505,7 +603,6 @@ plot <- plotmd_single_studies(words = b,
 ```{r pain2_followup1, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
 
 plot <- plotmd_single_studies(words = tpain3[[1]]$b, 
-                              nstudies = 3, 
                               numbers = tpain3[[1]]$c, 
                               fpPosition = ncol(tpain3[[1]]$b)-1,
                               xtick =  c(-2, -1, 0, 1, 2),
@@ -520,7 +617,6 @@ plot <- plotmd_single_studies(words = tpain3[[1]]$b,
   <p>
 ```{r pain2_followup2, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
 plot <- plotmd_single_studies(words = tpain3[[2]]$b, 
-                              nstudies = 3, 
                               numbers = tpain3[[2]]$c, 
                               fpPosition = ncol(tpain3[[2]]$b)-1,
                               xtick =  c(-2, -1, 0, 1, 2),
@@ -535,7 +631,6 @@ plot <- plotmd_single_studies(words = tpain3[[2]]$b,
   <p>
 ```{r pain2_followup3, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
 plot <- plotmd_single_studies(words = tpain3[[3]]$b, 
-                              nstudies = 3, 
                               numbers = tpain3[[3]]$c, 
                               fpPosition = ncol(tpain3[[3]]$b)-1,
                               xtick =  c(-2, -1, 0, 1, 2),
@@ -569,7 +664,6 @@ talt1 <- table_md(analysis = alt1_md, nstudies = 1,
 
 plot <- plotmd_single_studies(words = talt1$b,
                       numbers = talt1$c,
-                      nstudies = 1,
                       fpPosition = ncol(talt1$b),
                       xtick = c(-50, 0, 50, 150),
                       sizes = c(rep(NA,3), 1, NA),
@@ -599,7 +693,6 @@ talt2 <- table_md(analysis = alt2_md, nstudies = 3,
 
 plot <- plotmd_single_studies(words = talt2$b,
                       numbers = talt2$c,
-                      nstudies = 3,
                       fpPosition = ncol(talt2$b)-1,
                       xtick = c(-250, -150,-50, 0, 50, 150, 250),
                       sizes = c(rep(NA,3), 0.02*(alt2_md$pre$weights),NA, 1, NA),
@@ -630,7 +723,6 @@ tast1 <- table_md(analysis = ast1_md, nstudies = 1,
 
 plot <- plotmd_single_studies(words = tast1$b,
                       numbers = tast1$c,
-                      nstudies = 1,
                       fpPosition = ncol(tast1$b),
                       xtick = c(-50, 0, 50, 150),
                       sizes = c(rep(NA,3), 1, NA),
@@ -659,7 +751,6 @@ tast2 <- table_md(analysis = ast2_md, nstudies = 3,
 
 plot <- plotmd_single_studies(words = tast2$b,
                       numbers = tast2$c,
-                      nstudies = 3,
                       fpPosition = ncol(tast2$b)-1,
                       xtick = c(-250, -150,-50, 0, 50, 150, 250),
                       sizes = c(rep(NA,3), 0.02*(ast2_md$pre$weights),NA, 1, NA),
@@ -689,7 +780,6 @@ tbil1 <- table_md(analysis = bil1_md, nstudies = 1,
 
 plot <- plotmd_single_studies(words = tbil1$b,
                       numbers = tbil1$c,
-                      nstudies = 1,
                       fpPosition = ncol(tbil1$b),
                       xtick = c(-2,-1,0, 1,2),
                       sizes = c(rep(NA,3), 1, NA),
@@ -717,7 +807,6 @@ tbil2 <- table_md(analysis = bil2_md, nstudies = 3,
 
 plot <- plotmd_single_studies(words = tbil2$b,
                       numbers = tbil2$c,
-                      nstudies = 3,
                       fpPosition = ncol(tbil2$b)-1,
                       xtick = c(-2,-1,0, 1,2),
                       sizes = c(rep(NA,3), 0.02*(bil2_md$pre$weights),NA, 1, NA),
@@ -747,7 +836,6 @@ tsurt1 <- table_md(analysis = surt1_md, nstudies = 1,
 
 plot <- plotmd_single_studies(words = tsurt1$b,
                       numbers = tsurt1$c,
-                      nstudies = 1,
                       fpPosition = ncol(tsurt1$b),
                       xtick = c(250, 150, 50, 0, -50, -150, -250),
                       sizes = c(rep(NA,3), 1, NA),
@@ -776,7 +864,6 @@ tsurt2 <- table_md(analysis = surt2_md, nstudies = 3,
 
 plot <- plotmd_single_studies(words = tsurt2$b,
                       numbers = tsurt2$c,
-                      nstudies = 3,
                       fpPosition = ncol(tsurt2$b)-1,
                       xtick = c(-150, -50, 0, 50, 150, 250, 350),
                       sizes = c(rep(NA,3), 0.02*(surt2_md$pre$weights),NA, 1, NA),
@@ -786,4 +873,143 @@ plot <- plotmd_single_studies(words = tsurt2$b,
 ```
 
 </details>
+
+
+```{r cleaning_dichotomous_donor, echo=FALSE, message=FALSE, warning=FALSE}
+d <- read.csv("6 Extracted Data/outcome_dichotomous_donor.csv")
+d$outcomes2 <- paste(d$outcomes, d$definition)
+d$comparison[d$comparison == 'NR'] <- NA
+
+d2 <- d[!is.na(d$comparison),]
+
+names(d2)[10] <- "n1"
+names(d2)[11] <- "n2"
+names(d2)[12] <- "e1"
+names(d2)[13] <- "e2"
+
+d2$comparison[d2$comparison == 'ORLDH'] <- 'ODRH'
+
+d2[,c(9:13)] <- lapply(d2[,c(9:13)], as.numeric)
+
+
+d2$author <- 
+  ifelse(d2$refid==9, paste("Rho et al., 2020"),
+  ifelse(d2$refid==27, paste("Broering et al., 2020"),
+  ifelse(d2$refid==5, paste("Binoj et al., 2020"),
+  ifelse(d2$refid==172, paste("Chen et al., 2016"),
+  ifelse(d2$refid==74, paste("Cheah et al., 2019"),
+  ifelse(d2$refid==239, paste("Martucci et al., 2013"),
+  ifelse(d2$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
+
+```
+
+
+
+
+
+### Figure 16
+<details><summary><b>Show figure</b> - Risk of postoperative complications I-II after RLDRH vs LADRH</summary>
+
+```{r LADRH_complication1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+compLADRH <- subset(d2, comparison=='LADRH')
+
+comp1 <- subset(compLADRH, definition=='I-II')
+
+comp1_rr <- rr(comp1)
+
+tcomp1 <- table_rr(analysis = comp1_rr, nstudies = 1, 
+                    int = "RLDRH", comp = "LADRH",
+                    outcome = 'Complications')
+
+
+plot <- plotrr_single_studies(words = tcomp1$b,
+                      numbers = tcomp1$c,
+                      fpPosition = ncol(tcomp1$b),
+                      xtick = c(0.2,0.5,1,2,4),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 2), 'l'))
+```
+</details>
+
+
+
+### Figure 17
+<details><summary><b>Show figure</b> - Risk of postoperative complications III-IV after RLDRH vs LADRH</summary>
+
+
+```{r LADRH_complication2, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+comp2 <- subset(compLADRH, definition=='III-IV')
+
+comp2_rr <- rr(comp2)
+
+tcomp2 <- table_rr(analysis = comp2_rr, nstudies = 1, 
+                    int = "RLDRH", comp = "LADRH",
+                    outcome = 'Complications')
+
+
+plot <- plotrr_single_studies(words = tcomp2$b,
+                      numbers = tcomp2$c,
+                      fpPosition = ncol(tcomp2$b),
+                      xtick = c(0.06, 0.25,0.5,1,2,4, 16),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 2), 'l'))
+```
+</details>
+
+
+
+### Figure 18
+<details><summary><b>Show figure</b> - Risk of postoperative complications I-II after RLDRH vs ODRH</summary>
+
+```{r ODRH_complication1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+compODRH <- subset(d2, comparison=='ODRH')
+
+comp3 <- subset(compODRH, definition=='I-II')
+
+comp3_rr <- rr(comp3)
+
+tcomp3 <- table_rr(analysis = comp3_rr, nstudies = 2, 
+                    int = "RLDRH", comp = "ODRH",
+                    outcome = 'Complications')
+
+
+plot <- plotrr_single_studies(words = tcomp3$b,
+                      numbers = tcomp3$c,
+                      fpPosition = ncol(tcomp3$b),
+                      xtick = c(0.12,0.25,0.5,1,2,4,8),
+                      sizes = c(rep(NA,3), 0.008*(comp3_rr$pre$weights+50), NA, 1, NA),
+                      bolding = c(T, rep(F, 6), T, F),
+                      aligning = c('l', rep('c', 2), 'l', 'l'))
+```
+
+
+</details>
+
+
+
+### Figure 19
+<details><summary><b>Show figure</b> - Risk of postoperative complications I-II after RLDRH vs ODRH</summary>
+
+```{r ODRH_complication2, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+comp4 <- subset(compODRH, definition=='III-IV')
+
+comp4_rr <- rr(comp4)
+
+tcomp4 <- table_rr(analysis = comp4_rr, nstudies = 2, 
+                    int = "RLDRH", comp = "ODRH",
+                    outcome = 'Complications')
+
+
+plot <- plotrr_single_studies(words = tcomp4$b,
+                      numbers = tcomp4$c,
+                      fpPosition = ncol(tcomp4$b),
+                      xtick = c(0.06,0.25,1,4,16),
+                      sizes = c(rep(NA,3), 0.008*(comp4_rr$pre$weights+50), NA, 1, NA),
+                      bolding = c(T, rep(F, 6), T, F),
+                      aligning = c('l', rep('c', 2), 'l', 'l'))
+```
+</details>
+
 
