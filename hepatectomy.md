@@ -9,8 +9,8 @@ Oscar J. Ponce & Eddy Lincango
 
 <details>
 
-<summary> <b>Show figure</b> - Differences in blood loss (mL) after
-RLDRH vs LADRH</summary>
+<summary> <b>Show figure</b> - Difference in mean blood loss (mL) after
+RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/blood_loss_1-1.svg)<!-- -->
 
@@ -20,8 +20,8 @@ RLDRH vs LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in blood loss (mL) after RLDRH
-vs ODRH </summary>
+<summary><b>Show figure</b> - Difference in mean blood loss (mL) after
+RLDRH versus ODRH </summary>
 
 <img src="hepatectomy_files/figure-gfm/blood_loss2-1.svg" width="14400" />
 
@@ -31,8 +31,8 @@ vs ODRH </summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in length of hospital stay
-(days) after RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Difference in mean length of hospital stay
+(days) after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/hospital1-1.svg)<!-- -->
 
@@ -42,8 +42,8 @@ vs ODRH </summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in length of hospital stay
-(days) after RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Difference in mean length of hospital stay
+(days) after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/hospital2-1.svg)<!-- -->
 
@@ -53,8 +53,8 @@ vs ODRH </summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in pain (VAS) after RLDRH vs
-LADRH</summary>
+<summary><b>Show figure</b> - Difference in mean pain scores (VAS) after
+RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/pain1-1.svg)<!-- -->
 
@@ -64,8 +64,8 @@ LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in pain (VAS) after RLDRH vs
-ODRH</summary>
+<summary><b>Show figure</b> - Difference in mean pain scores (VAS) after
+RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/pain2_followups-1.svg)<!-- -->
 
@@ -82,8 +82,8 @@ ODRH</summary>
     
     <details>
     
-    <summary> Supp Fig 1: RLDRH vs ODRH - Pain (VAS) at day 0-1
-    </summary>
+    <summary> Supp Fig 1: RLDRH versus ODRH - Difference in mean pain
+    scores (VAS) at day 0-1 </summary>
     
     <p>
     
@@ -97,8 +97,8 @@ ODRH</summary>
     
     <details>
     
-    <summary> Supp Fig 2: RLDRH vs ODRH - Pain (VAS) at day 2-3
-    </summary>
+    <summary> Supp Fig 2: RLDRH versus ODRH - Difference in pain scores
+    (VAS) at day 2-3 </summary>
     
     <p>
     
@@ -112,8 +112,8 @@ ODRH</summary>
     
     <details>
     
-    <summary> Supp Fig 3: RLDRH vs ODRH - Pain (VAS) at day greater than
-    3 </summary>
+    <summary> Supp Fig 3: RLDRH versus ODRH - Difference in pain scores
+    (VAS) at day greater than 3 </summary>
     
     <p>
     
@@ -129,8 +129,8 @@ ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in peak ALT level (IU/L) after
-RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Difference mean in peak ALT levels (IU/L)
+after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/alt1-1.svg)<!-- -->
 
@@ -140,8 +140,8 @@ RLDRH vs LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in peak ALT level (IU/L) after
-RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Difference in mean peak ALT levels (IU/L)
+after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/alt2-1.svg)<!-- -->
 
@@ -151,8 +151,8 @@ RLDRH vs ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in peak AST level (IU/L) after
-RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L)
+after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/ast1-1.svg)<!-- -->
 
@@ -162,8 +162,8 @@ RLDRH vs LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in peak AST level (IU/L) after
-RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L)
+after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/ast2-1.svg)<!-- -->
 
@@ -173,8 +173,8 @@ RLDRH vs ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in peak total Bilirubin
-(mg/dL) after RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Difference in mean peak total bilirubin
+levels (mg/dL) after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/bilirubin1-1.svg)<!-- -->
 
@@ -184,8 +184,8 @@ RLDRH vs ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in peak total Bilirubin
-(mg/dL) after RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Difference in peak total bilirubin levels
+(mg/dL) after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/bilirubin2-1.svg)<!-- -->
 
@@ -195,8 +195,8 @@ RLDRH vs ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in total operative time (min)
-after RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Difference in mean total operative time
+(min) after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/operativetime1-1.svg)<!-- -->
 
@@ -206,8 +206,8 @@ after RLDRH vs LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Differences in total operative time (min)
-after RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Difference in mean total operative time
+(min) after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/operativetime2-1.svg)<!-- -->
 
@@ -217,8 +217,8 @@ after RLDRH vs ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Risk of postoperative complications I-II
-after RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo I-II at 30 days after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/LADRH_complication1-1.svg)<!-- -->
 
@@ -228,8 +228,8 @@ after RLDRH vs LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Risk of postoperative complications III-IV
-after RLDRH vs LADRH</summary>
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo III-IV at 30 days after RLDRH versus LADRH</summary>
 
 ![](hepatectomy_files/figure-gfm/LADRH_complication2-1.svg)<!-- -->
 
@@ -239,8 +239,8 @@ after RLDRH vs LADRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Risk of postoperative complications I-II
-after RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Risk of postoperative Clevien-Dindo
+complications I-II at 30 days after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/ODRH_complication1-1.svg)<!-- -->
 
@@ -250,9 +250,141 @@ after RLDRH vs ODRH</summary>
 
 <details>
 
-<summary><b>Show figure</b> - Risk of postoperative complications I-II
-after RLDRH vs ODRH</summary>
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/ODRH_complication2-1.svg)<!-- -->
 
 </details>
+
+## Summary of forest plots - *Recipient Patients*
+
+</details>
+
+### Figure 20
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean length of hospital stay
+(days) after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/hospitalstay_LADRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 21
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean length of hospital stay
+(days) after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/hospitalstay_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 22
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean blood loss (mL) after
+RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/blood_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 23
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean AST peak levels (U/L)
+afterRLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/ast_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 24
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean ALT peak levels (IU/L)
+after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/alt_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 25
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean peak total bilirubin
+levels after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/bilirubin_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 26
+
+<details>
+
+<summary><b>Show figure</b> - Mortality risk at 30 days after RLDRH
+versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/mortality_LADRH-1.svg)<!-- -->
+
+</details>
+
+### Figure 27
+
+<details>
+
+<summary><b>Show figure</b> - Mortality risk at 30 days after RLDRH
+versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/mortality_ODRH_recipient-1.svg)<!-- -->
+
+### Figure 28
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo I-II at 30 days after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/complciationsI_LADRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 28
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo I-II at 30 days after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/complicationsI_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 29
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo III-IV at 30 days after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/complicationsIII_LADRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Figure 30
+
+<details>
+
+<summary><b>Show figure</b> - Risk of postoperative complications
+Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/complicationsIII_ODRH_recipient-1.svg)<!-- -->
