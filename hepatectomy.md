@@ -347,6 +347,8 @@ versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/mortality_ODRH_recipient-1.svg)<!-- -->
 
+</details>
+
 ### Figure 28
 
 <details>
@@ -358,7 +360,7 @@ Clevien-Dindo I-II at 30 days after RLDRH versus LADRH</summary>
 
 </details>
 
-### Figure 28
+### Figure 29
 
 <details>
 
@@ -369,7 +371,7 @@ Clevien-Dindo I-II at 30 days after RLDRH versus ODRH</summary>
 
 </details>
 
-### Figure 29
+### Figure 30
 
 <details>
 
@@ -380,7 +382,7 @@ Clevien-Dindo III-IV at 30 days after RLDRH versus LADRH</summary>
 
 </details>
 
-### Figure 30
+### Figure 31
 
 <details>
 
@@ -388,3 +390,5 @@ Clevien-Dindo III-IV at 30 days after RLDRH versus LADRH</summary>
 Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/complicationsIII_ODRH_recipient-1.svg)<!-- -->
+
+</details>
