@@ -191,9 +191,13 @@ scores (VAS) at day 0-1 </summary>
 
 </details>
 
-# Overall
+# Overall1
 
-![](hepatectomy_files/figure-gfm/overall_continuous_donor-1.svg)<!-- -->
+![](hepatectomy_files/figure-gfm/overall_continuous_donor1-1.svg)<!-- -->
+
+# Overall2
+
+![](hepatectomy_files/figure-gfm/overall_continuous_donor2-1.svg)<!-- -->
 
 ### Figure 16
 

@@ -850,20 +850,20 @@ plot <- plotmd_single_studies(words = thospital2$b,
 
 
 
-# Overall 
-```{r overall_continuous_donor, fig.height=10, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+# Overall1
+```{r overall_continuous_donor1, fig.height=6, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
 
-a <- c('Outcome', 'N of studies', 
+a1 <- c('Outcome', 'N of studies', 
        'Amr1 (n)', 'Arm2 (n)', 
        'I2', 
        paste0('Mean Difference (MD)','\n','95%CI'), 
        paste0('Figure with','\n', 'Detailed Information'))
 
 b <- c('Mean total operative time (min)', rep(NA, 6))
-c <- c(paste0(surt1$intervention, ' vs ', surt1$comparison), surt1_md$ma$k, 
+c <- c(paste0('A. ', surt1$intervention, ' vs ', surt1$comparison), surt1_md$ma$k, 
        sum(surt1$n1), sum(surt1$n2), 'NA', tsurt1$b[[4,6]], 
        'Suppl Fig #1')
-d <- c(paste0(unique(surt2$intervention), ' vs ', unique(surt2$comparison)), surt2_md$ma$k, 
+d <- c(paste0('B. ', unique(surt2$intervention), ' vs ', unique(surt2$comparison)), surt2_md$ma$k, 
        sum(surt2$n1), sum(surt2$n2), 
        ifelse(surt2_md$ma$k == 1, paste('NA'), paste0(formatC(surt2_md$ma$I2, format='f', digits=0), '%')),
        tsurt2$b[[9,6]], 
@@ -871,10 +871,10 @@ d <- c(paste0(unique(surt2$intervention), ' vs ', unique(surt2$comparison)), sur
 
 
 e <- c('Mean blood loss (mL)', rep(NA, 6))
-f <- c(paste0(unique(blood1$intervention), ' vs ', unique(blood1$comparison)), blood1_md$ma$k, 
+f <- c(paste0('C. ', unique(blood1$intervention), ' vs ', unique(blood1$comparison)), blood1_md$ma$k, 
        sum(blood1$n1), sum(blood1$n2), 'NA', tblood1$b[[4,6]], 
        'Suppl Fig #3')
-g <- c(paste0(unique(blood2$intervention), ' vs ', unique(blood2$comparison)), blood2_md$ma$k, 
+g <- c(paste0('D. ', unique(blood2$intervention), ' vs ', unique(blood2$comparison)), blood2_md$ma$k, 
        sum(blood2$n1), sum(blood2$n2), 
        ifelse(blood2_md$ma$k == 1, paste('NA'), paste0(formatC(blood2_md$ma$I2, format='f', digits=0),'%')),
        tblood2$b[[9,6]], 
@@ -883,24 +883,24 @@ g <- c(paste0(unique(blood2$intervention), ' vs ', unique(blood2$comparison)), b
 
 
 h <- c('Mean peak ALT levels (UI/L)', rep(NA, 6))
-i <- c(paste0(unique(alt1$intervention), ' vs ', unique(alt1$comparison)), alt1_md$ma$k, 
+i <- c(paste0('E. ', unique(alt1$intervention), ' vs ', unique(alt1$comparison)), alt1_md$ma$k, 
        sum(alt1$n1), sum(alt1$n2), 
        ifelse(alt1_md$ma$k == 1, paste('NA'), paste0(formatC(alt1_md$ma$I2, format='f', digits=0),'%')),
        talt1$b[[4,6]], 
        'Suppl Fig #5')
-j <- c(paste0(unique(alt2$intervention), ' vs ', unique(alt2$comparison)), alt2_md$ma$k, 
+j <- c(paste0('F. ', unique(alt2$intervention), ' vs ', unique(alt2$comparison)), alt2_md$ma$k, 
        sum(alt2$n1), sum(alt2$n2), 
        ifelse(alt2_md$ma$k == 1, paste('NA'), paste0(formatC(alt2_md$ma$I2, format='f',                digits=0),'%')),
        talt2$b[[8,6]], 
        'Suppl Fig #6')
 
 k <- c('Mean peak AST levels (UI/L)', rep(NA, 6))
-l <- c(paste0(unique(ast1$intervention), ' vs ', unique(ast1$comparison)), ast1_md$ma$k, 
+l <- c(paste0('G. ', unique(ast1$intervention), ' vs ', unique(ast1$comparison)), ast1_md$ma$k, 
        sum(ast1$n1), sum(ast1$n2), 
        ifelse(ast1_md$ma$k == 1, paste('NA'), paste0(formatC(ast1_md$ma$I2, format='f', digits=0),'%')),
        tast1$b[[4,6]], 
        'Suppl Fig #7')
-m <- c(paste0(unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_md$ma$k, 
+m <- c(paste0('H. ', unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_md$ma$k, 
        sum(ast2$n1), sum(ast2$n2), 
        ifelse(ast2_md$ma$k == 1, paste('NA'), paste0(formatC(ast2_md$ma$I2, format='f',                digits=0),'%')),
        tast2$b[[8,6]], 
@@ -908,13 +908,90 @@ m <- c(paste0(unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_
 
 
 
+
+overall1 <- rbind(a1,b,c,d,e,f,g,h,i,j,k,l,m)
+overall1 <- as.data.frame(overall1)
+
+rownames(overall1) <- NULL
+
+overall1 <- overall1 %>% add_row(.after = 1)
+overall1 <- overall1 %>% add_row(.after = 1)
+overall1 <- overall1 %>% add_row(.after = 6)
+
+overall1 <- overall1 %>% add_row(.after = 10)
+overall1 <- overall1 %>% add_row(.after = 14)
+overall1 <- overall1 %>% add_row(.after = 18)
+
+
+sub1 <- c(5,6,9,10,13,14,17,18) 
+overall1[,1][sub1] <- paste("      ",overall1[,1][sub1])
+
+
+
+toverall1 <- rbind(NA, NA, NA, NA, tsurt1$c[4,], tsurt2$c[9,],
+                  NA, NA, tblood1$c[4,], tblood2$c[9,],
+                  NA, NA, talt1$c[4,], talt2$c[8,],
+                  NA, NA, tast1$c[4,], tast2$c[8,], NA)
+
+
+toverall1 <- structure(list(
+          mean = c(toverall1$mean),
+          lower = c(toverall1$lower),
+          upper = c(toverall1$upper)),
+          .Names = c("mean", "lower", "upper"),
+          row.names = c(NA, (-1L*nrow(toverall1))),
+          class = "data.frame")
+
+
+forestplot(overall1,
+             graph.pos = 6,
+             zero = 0,
+             toverall1,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
+             lineheight=unit(0.7,'cm'),
+             boxsize = 0.5,
+             line.margin = 2,
+             is.summary = c(T, rep(F,2), T, rep(F,3), T, rep(F,3), T, rep(F,3), T, rep(F,3)),
+             align = c('l', rep('c',4), 'l'),
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
+                              ticks = gpar(cex = 0.9, fontface="bold"),
+                              summary = gpar(cex = 0.9),
+                              xlab = gpar(cex=0.9)),
+             xticks = c(-250, -150,-50,0,50,150, 250),
+             xlog=FALSE,
+             clip = c(0.2, 32),
+             grid = c(-250, -150,-50,0,50,150, 250),
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             lwd.zero = 2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
+
+
+```
+
+
+
+# Overall2
+```{r overall_continuous_donor2, fig.height=6, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+
+a2 <- c('Outcome', 'N of studies', 
+       'Amr1 (n)', 'Arm2 (n)', 
+       'I2', 
+       paste0('Mean Difference (MD)','\n','95%CI'), 
+       paste0('Figure with','\n', 'Detailed Information'))
+
+
 n <- c('Mean bilirubin levels (mg/dL)', rep(NA, 6))
-o <- c(paste0(unique(bil1$intervention), ' vs ', unique(bil1$comparison)), bil1_md$ma$k, 
+o <- c(paste0('A. ', unique(bil1$intervention), ' vs ', unique(bil1$comparison)), bil1_md$ma$k, 
        sum(bil1$n1), sum(bil1$n2), 
        ifelse(bil1_md$ma$k == 1, paste0('NA'), paste0(formatC(bil1_md$ma$I2, format='f', digits=0),'%')),
        tbil1$b[[4,6]], 
        'Suppl Fig #9')
-p <- c(paste0(unique(bil2$intervention), ' vs ', unique(bil2$comparison)), bil2_md$ma$k, 
+p <- c(paste0('B. ',unique(bil2$intervention), ' vs ', unique(bil2$comparison)), bil2_md$ma$k, 
        sum(bil2$n1), sum(bil2$n2), 
        ifelse(bil2_md$ma$k == 1, paste0('NA'), paste0(formatC(bil2_md$ma$I2, format='f',                digits=0),'%')),
        tbil2$b[[8,6]], 
@@ -925,7 +1002,7 @@ q <- c('Mean pain scores (VAS)', rep(NA, 6))
 
 
 
-r <- c(paste0(unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$comparison), ' (',
+r <- c(paste0('C. ', unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$comparison), ' (',
         paste0(unique(pain2_fu1$pre$followup)), ') '), pain2_fu1$ma$k, 
        sum(pain2_fu1$pre$n1), sum(pain2_fu1$pre$n2), 
        ifelse(pain2_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu1$ma$I2, format='f', digits=0),'%')),
@@ -933,13 +1010,13 @@ r <- c(paste0(unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$c
        'Suppl Fig #11')
 
 
-s <- c(paste0(unique(pain2_fu2$pre$intervention), ' vs ', unique(pain2_fu2$pre$comparison), ' (',
+s <- c(paste0('D. ', unique(pain2_fu2$pre$intervention), ' vs ', unique(pain2_fu2$pre$comparison), ' (',
         paste0(unique(pain2_fu2$pre$followup)), ') '), pain2_fu2$ma$k, 
        sum(pain2_fu2$pre$n1), sum(pain2_fu2$pre$n2), 
        ifelse(pain2_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu2$ma$I2, format='f', digits=0),'%')),
        tpain2_fu2$b[[4,7]], 
        'Suppl Fig #11')
-t <- c(paste0(unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$comparison), ' (',
+t <- c(paste0('E. ', unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$comparison), ' (',
         paste0(unique(pain2_fu3$pre$followup)), ') '), pain2_fu3$ma$k, 
        sum(pain2_fu3$pre$n1), sum(pain2_fu3$pre$n2), 
        ifelse(pain2_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu3$ma$I2, format='f', digits=0),'%')),
@@ -948,19 +1025,19 @@ t <- c(paste0(unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$c
 
                   
 
-u <- c(paste0(unique(pain3_fu1$pre$intervention), ' vs ', unique(pain3_fu1$pre$comparison), ' (',
+u <- c(paste0('F. ', unique(pain3_fu1$pre$intervention), ' vs ', unique(pain3_fu1$pre$comparison), ' (',
         paste0(unique(pain3_fu1$pre$followup)), ') '), pain3_fu1$ma$k, 
        sum(pain3_fu1$pre$n1), sum(pain3_fu1$pre$n2), 
        ifelse(pain3_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu1$ma$I2, format='f', digits=0),'%')),
        tpain3_fu1$b[[8,6]], 
        'Suppl Fig #12')
-v <- c(paste0(unique(pain3_fu2$pre$intervention), ' vs ', unique(pain3_fu2$pre$comparison), ' (',
+v <- c(paste0('G. ', unique(pain3_fu2$pre$intervention), ' vs ', unique(pain3_fu2$pre$comparison), ' (',
         paste0(unique(pain3_fu2$pre$followup)), ') '), pain3_fu2$ma$k, 
        sum(pain3_fu2$pre$n1), sum(pain3_fu2$pre$n2), 
        ifelse(pain3_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu2$ma$I2, format='f', digits=0),'%')),
        tpain3_fu2$b[[7,6]], 
        'Suppl Fig #13')
-w <- c(paste0(unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$comparison), ' (',
+w <- c(paste0('H. ', unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$comparison), ' (',
         paste0(unique(pain3_fu3$pre$followup)), ') '), pain3_fu3$ma$k, 
        sum(pain3_fu3$pre$n1), sum(pain3_fu3$pre$n2), 
        ifelse(pain3_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu3$ma$I2, format='f', digits=0),'%')),
@@ -970,78 +1047,71 @@ w <- c(paste0(unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$c
 
 
 x <- c('Mean hospital length of stay (days)', rep(NA, 6))
-y <- c(paste0(unique(hospital1$intervention), ' vs ', unique(hospital1$comparison)), hospital1_md$ma$k, 
+y <- c(paste0('I. ', unique(hospital1$intervention), ' vs ', unique(hospital1$comparison)), hospital1_md$ma$k, 
        sum(hospital1$n1), sum(hospital1$n2), 
        ifelse(hospital1_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital1_md$ma$I2, format='f', digits=0),'%')),
        thospital1$b[[4,6]], 
        'Suppl Fig #15')
-z <- c(paste0(unique(hospital2$intervention), ' vs ', unique(hospital2$comparison)), hospital2_md$ma$k, 
+z <- c(paste0('J. ', unique(hospital2$intervention), ' vs ', unique(hospital2$comparison)), hospital2_md$ma$k, 
        sum(hospital2$n1), sum(hospital2$n2), 
        ifelse(hospital2_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital2_md$ma$I2, format='f',                digits=0),'%')),
        thospital2$b[[9,6]], 
        'Suppl Fig #16')
 
-overall1 <- rbind(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
-overall1 <- as.data.frame(overall1)
+overall2 <- rbind(a2,n,o,p,q,r,s,t,u,v,w,x,y,z)
+overall2 <- as.data.frame(overall2)
 
-rownames(overall1) <- NULL
+rownames(overall2) <- NULL
 
-overall1 <- overall1 %>% add_row(.after = 1)
-overall1 <- overall1 %>% add_row(.after = 5)
-overall1 <- overall1 %>% add_row(.after = 9)
-overall1 <- overall1 %>% add_row(.after = 13)
-overall1 <- overall1 %>% add_row(.after = 17)
-overall1 <- overall1 %>% add_row(.after = 21)
-overall1 <- overall1 %>% add_row(.after = 29)
-overall1 <- overall1 %>% add_row(.after = 33)
+overall2 <- overall2 %>% add_row(.after = 1)
+overall2 <- overall2 %>% add_row(.after = 1)
+
+overall2 <- overall2 %>% add_row(.after = 6)
+overall2 <- overall2 %>% add_row(.after = 14)
+overall2 <- overall2 %>% add_row(.after = 18)
 
 
-sub1 <- c(4,5,8,9,12,13,16,17,20,21,24:29,32,33) 
-overall1[,1][sub1] <- paste("      ",overall1[,1][sub1])
+sub1 <- c(5,6,9:14,17,18) 
+overall2[,1][sub1] <- paste("      ",overall2[,1][sub1])
 
 
 
-toverall <- rbind(NA, NA, NA, tsurt1$c[4,], tsurt2$c[9,],
-                  NA, NA, tblood1$c[4,], tblood2$c[9,],
-                  NA, NA, talt1$c[4,], talt2$c[8,],
-                  NA, NA, tast1$c[4,], tast2$c[8,],
-                  NA, NA, tbil1$c[4,], tbil2$c[8,],
+toverall2 <- rbind(NA, NA, NA, NA, tbil1$c[4,], tbil2$c[8,],
                   NA, NA, tpain2_fu1$c[4,], tpain2_fu2$c[4,], tpain2_fu3$c[4,],
                   tpain3_fu1$c[8,], tpain3_fu2$c[7,], tpain3_fu3$c[7,],
                   NA, NA, thospital1$c[4,], thospital2$c[9,], NA)
 
 
-toverall <- structure(list(
-          mean = c(toverall$mean),
-          lower = c(toverall$lower),
-          upper = c(toverall$upper)),
+toverall2 <- structure(list(
+          mean = c(toverall2$mean),
+          lower = c(toverall2$lower),
+          upper = c(toverall2$upper)),
           .Names = c("mean", "lower", "upper"),
-          row.names = c(NA, (-1L*nrow(toverall))),
+          row.names = c(NA, (-1L*nrow(toverall2))),
           class = "data.frame")
 
 
-forestplot(overall1,
+forestplot(overall2,
              graph.pos = 6,
              zero = 0,
-             toverall,
+             toverall2,
              new_page = TRUE,
              colgap = unit(5, "mm"),
              hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
              lineheight=unit(0.7,'cm'),
              boxsize = 0.5,
              line.margin = 2,
-             is.summary = c(T, F, T, rep(F,3), T, rep(F,3), T, rep(F,3), T, rep(F,3), T, rep(F,3),
-                            T, rep(F, 7), T, rep(F,3)),
+             is.summary = c(T, rep(F,2), T, rep(F,3), T, rep(F, 7), T, rep(F,3)),
              align = c('l', rep('c',4), 'l'),
              ci.vertices = TRUE,
              txt_gp = fpTxtGp(label =gpar (cex=0.9), 
                               ticks = gpar(cex = 0.9, fontface="bold"),
                               summary = gpar(cex = 0.9),
                               xlab = gpar(cex=0.9)),
-             xticks = c(-150,-50,-10,0,10,50,150),
+             xticks = c(-2, -1, 0, 1, 2),
              xlog=FALSE,
              clip = c(0.2, 32),
-             grid = c(-150,-50,-10,0,10,50,150),
+             grid = c(-2, -1, 0, 1, 2),
              lwd.xaxis = 1,
              lwd.ci = 2.2,
              lwd.zero = 2,
