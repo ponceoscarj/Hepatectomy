@@ -5,193 +5,7 @@ Oscar J. Ponce & Eddy Lincango
 
 ## Summary of forest plots - *Donors Patients*
 
-### Figure 2
-
-<details>
-
-<summary> <b>Show figure</b> - Difference in mean blood loss (mL) after
-RLDRH versus LADRH</summary>
-
-![](hepatectomy_files/figure-gfm/blood_loss_1-1.svg)<!-- -->
-
-</details>
-
-### Figure 3
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean blood loss (mL) after
-RLDRH versus ODRH </summary>
-
-<img src="hepatectomy_files/figure-gfm/blood_loss2-1.svg" width="14400" />
-
-</details>
-
-### Figure 4
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean length of hospital stay
-(days) after RLDRH versus LADRH</summary>
-
-![](hepatectomy_files/figure-gfm/hospital1-1.svg)<!-- -->
-
-</details>
-
-### Figure 5
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean length of hospital stay
-(days) after RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/hospital2-1.svg)<!-- -->
-
-</details>
-
-### Figure 6
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean pain scores (VAS) after
-RLDRH versus LADRH</summary>
-
-![](hepatectomy_files/figure-gfm/pain1-1.svg)<!-- -->
-
-</details>
-
-### Figure 7
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean pain scores (VAS) after
-RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/pain2_followups-1.svg)<!-- -->
-
-> To generate this forest plot, we used information from Supplementary
-> Figures 1 to 3.
-
-</details>
-
-</br>
-
-> **Show supplementary figures used to generate Figure 7**
-
-  - 
-    
-    <details>
-    
-    <summary> Supp Fig 1: RLDRH versus ODRH - Difference in mean pain
-    scores (VAS) at day 0-1 </summary>
-    
-    <p>
-    
-    ![](hepatectomy_files/figure-gfm/pain2_followup1-1.svg)<!-- -->
-    
-    </p>
-    
-    </details>
-
-  - 
-    
-    <details>
-    
-    <summary> Supp Fig 2: RLDRH versus ODRH - Difference in pain scores
-    (VAS) at day 2-3 </summary>
-    
-    <p>
-    
-    ![](hepatectomy_files/figure-gfm/pain2_followup2-1.svg)<!-- -->
-    
-    </p>
-    
-    </details>
-
-  - 
-    
-    <details>
-    
-    <summary> Supp Fig 3: RLDRH versus ODRH - Difference in pain scores
-    (VAS) at day greater than 3 </summary>
-    
-    <p>
-    
-    ![](hepatectomy_files/figure-gfm/pain2_followup3-1.svg)<!-- -->
-    
-    </p>
-    
-    </details>
-
-<br />
-
-### Figure 8
-
-<details>
-
-<summary><b>Show figure</b> - Difference mean in peak ALT levels (IU/L)
-after RLDRH versus LADRH</summary>
-
-![](hepatectomy_files/figure-gfm/alt1-1.svg)<!-- -->
-
-</details>
-
-### Figure 9
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean peak ALT levels (IU/L)
-after RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/alt2-1.svg)<!-- -->
-
-</details>
-
-### Figure 10
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L)
-after RLDRH versus LADRH</summary>
-
-![](hepatectomy_files/figure-gfm/ast1-1.svg)<!-- -->
-
-</details>
-
-### Figure 11
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L)
-after RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/ast2-1.svg)<!-- -->
-
-</details>
-
-### Figure 12
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean peak total bilirubin
-levels (mg/dL) after RLDRH versus LADRH</summary>
-
-![](hepatectomy_files/figure-gfm/bilirubin1-1.svg)<!-- -->
-
-</details>
-
-### Figure 13
-
-<details>
-
-<summary><b>Show figure</b> - Difference in peak total bilirubin levels
-(mg/dL) after RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/bilirubin2-1.svg)<!-- -->
-
-</details>
-
-### Figure 14
+### Supplementary Figure 1
 
 <details>
 
@@ -202,7 +16,7 @@ levels (mg/dL) after RLDRH versus LADRH</summary>
 
 </details>
 
-### Figure 15
+### Supplementary Figure 2
 
 <details>
 
@@ -212,6 +26,174 @@ levels (mg/dL) after RLDRH versus LADRH</summary>
 ![](hepatectomy_files/figure-gfm/operativetime2-1.svg)<!-- -->
 
 </details>
+
+### Supplementary figure 3
+
+<details>
+
+<summary> <b>Show figure</b> - Difference in mean blood loss (mL) after
+RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/blood_loss_1-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 4
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean blood loss (mL) after
+RLDRH versus ODRH </summary>
+
+<img src="hepatectomy_files/figure-gfm/blood_loss2-1.svg" width="14400" />
+
+</details>
+
+### Supplementary figure 5
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean peak ALT levels (IU/L)
+after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/alt1-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 6
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean peak ALT levels (IU/L)
+after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/alt2-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 7
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L)
+after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/ast1-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 8
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L)
+after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/ast2-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 9
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean peak total bilirubin
+levels (mg/dL) after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/bilirubin1-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 10
+
+<details>
+
+<summary><b>Show figure</b> - Difference in peak total bilirubin levels
+(mg/dL) after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/bilirubin2-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 11
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean pain scores (VAS) after
+RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/pain2-1.svg)<!-- -->
+
+</details>
+
+<details>
+
+<summary> Supp Fig 12: RLDRH versus ODRH - Difference in mean pain
+scores (VAS) at day 0-1 </summary>
+
+<p>
+
+![](hepatectomy_files/figure-gfm/pain3_analysis-1.svg)<!-- -->
+
+![](hepatectomy_files/figure-gfm/pain2_followup1-1.svg)<!-- -->
+
+</p>
+
+</details>
+
+<details>
+
+<summary> Supp Fig 13: RLDRH versus ODRH - Difference in pain scores
+(VAS) at day 2-3 </summary>
+
+<p>
+
+![](hepatectomy_files/figure-gfm/pain2_followup2-1.svg)<!-- -->
+
+</p>
+
+</details>
+
+<details>
+
+<summary> Supp Fig 14: RLDRH versus ODRH - Difference in pain scores
+(VAS) at day greater than 3 </summary>
+
+<p>
+
+![](hepatectomy_files/figure-gfm/pain2_followup3-1.svg)<!-- -->
+
+</p>
+
+</details>
+
+<br />
+
+### Supplementary figure 15
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean length of hospital stay
+(days) after RLDRH versus LADRH</summary>
+
+![](hepatectomy_files/figure-gfm/hospital1-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 16
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean length of hospital stay
+(days) after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/hospital2-1.svg)<!-- -->
+
+</details>
+
+# Overall
+
+![](hepatectomy_files/figure-gfm/overall_continuous_donor-1.svg)<!-- -->
 
 ### Figure 16
 
