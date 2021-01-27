@@ -859,22 +859,22 @@ a1 <- c('Outcome', 'N of studies',
        paste0('Mean Difference (MD)','\n','95%CI'), 
        paste0('Figure with','\n', 'Detailed Information'))
 
-b <- c('Mean total operative time (min)', rep(NA, 6))
-c <- c(paste0('A. ', surt1$intervention, ' vs ', surt1$comparison), surt1_md$ma$k, 
+b <- c('A. Mean total operative time (min)', rep(NA, 6))
+c <- c(paste0(surt1$intervention, ' vs ', surt1$comparison), surt1_md$ma$k, 
        sum(surt1$n1), sum(surt1$n2), 'NA', tsurt1$b[[4,6]], 
        'Suppl Fig #1')
-d <- c(paste0('B. ', unique(surt2$intervention), ' vs ', unique(surt2$comparison)), surt2_md$ma$k, 
+d <- c(paste0(unique(surt2$intervention), ' vs ', unique(surt2$comparison)), surt2_md$ma$k, 
        sum(surt2$n1), sum(surt2$n2), 
        ifelse(surt2_md$ma$k == 1, paste('NA'), paste0(formatC(surt2_md$ma$I2, format='f', digits=0), '%')),
        tsurt2$b[[9,6]], 
        'Suppl Fig #2')
 
 
-e <- c('Mean blood loss (mL)', rep(NA, 6))
-f <- c(paste0('C. ', unique(blood1$intervention), ' vs ', unique(blood1$comparison)), blood1_md$ma$k, 
+e <- c('B. Mean blood loss (mL)', rep(NA, 6))
+f <- c(paste0(unique(blood1$intervention), ' vs ', unique(blood1$comparison)), blood1_md$ma$k, 
        sum(blood1$n1), sum(blood1$n2), 'NA', tblood1$b[[4,6]], 
        'Suppl Fig #3')
-g <- c(paste0('D. ', unique(blood2$intervention), ' vs ', unique(blood2$comparison)), blood2_md$ma$k, 
+g <- c(paste0(unique(blood2$intervention), ' vs ', unique(blood2$comparison)), blood2_md$ma$k, 
        sum(blood2$n1), sum(blood2$n2), 
        ifelse(blood2_md$ma$k == 1, paste('NA'), paste0(formatC(blood2_md$ma$I2, format='f', digits=0),'%')),
        tblood2$b[[9,6]], 
@@ -882,25 +882,25 @@ g <- c(paste0('D. ', unique(blood2$intervention), ' vs ', unique(blood2$comparis
 
 
 
-h <- c('Mean peak ALT levels (UI/L)', rep(NA, 6))
-i <- c(paste0('E. ', unique(alt1$intervention), ' vs ', unique(alt1$comparison)), alt1_md$ma$k, 
+h <- c('C. Mean peak ALT levels (UI/L)', rep(NA, 6))
+i <- c(paste0(unique(alt1$intervention), ' vs ', unique(alt1$comparison)), alt1_md$ma$k, 
        sum(alt1$n1), sum(alt1$n2), 
        ifelse(alt1_md$ma$k == 1, paste('NA'), paste0(formatC(alt1_md$ma$I2, format='f', digits=0),'%')),
        talt1$b[[4,6]], 
        'Suppl Fig #5')
-j <- c(paste0('F. ', unique(alt2$intervention), ' vs ', unique(alt2$comparison)), alt2_md$ma$k, 
+j <- c(paste0(unique(alt2$intervention), ' vs ', unique(alt2$comparison)), alt2_md$ma$k, 
        sum(alt2$n1), sum(alt2$n2), 
        ifelse(alt2_md$ma$k == 1, paste('NA'), paste0(formatC(alt2_md$ma$I2, format='f',                digits=0),'%')),
        talt2$b[[8,6]], 
        'Suppl Fig #6')
 
-k <- c('Mean peak AST levels (UI/L)', rep(NA, 6))
-l <- c(paste0('G. ', unique(ast1$intervention), ' vs ', unique(ast1$comparison)), ast1_md$ma$k, 
+k <- c('D. Mean peak AST levels (UI/L)', rep(NA, 6))
+l <- c(paste0(unique(ast1$intervention), ' vs ', unique(ast1$comparison)), ast1_md$ma$k, 
        sum(ast1$n1), sum(ast1$n2), 
        ifelse(ast1_md$ma$k == 1, paste('NA'), paste0(formatC(ast1_md$ma$I2, format='f', digits=0),'%')),
        tast1$b[[4,6]], 
        'Suppl Fig #7')
-m <- c(paste0('H. ', unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_md$ma$k, 
+m <- c(paste0(unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_md$ma$k, 
        sum(ast2$n1), sum(ast2$n2), 
        ifelse(ast2_md$ma$k == 1, paste('NA'), paste0(formatC(ast2_md$ma$I2, format='f',                digits=0),'%')),
        tast2$b[[8,6]], 
@@ -985,24 +985,24 @@ a2 <- c('Outcome', 'N of studies',
        paste0('Figure with','\n', 'Detailed Information'))
 
 
-n <- c('Mean bilirubin levels (mg/dL)', rep(NA, 6))
-o <- c(paste0('A. ', unique(bil1$intervention), ' vs ', unique(bil1$comparison)), bil1_md$ma$k, 
+n <- c('A. Mean bilirubin levels (mg/dL)', rep(NA, 6))
+o <- c(paste0(unique(bil1$intervention), ' vs ', unique(bil1$comparison)), bil1_md$ma$k, 
        sum(bil1$n1), sum(bil1$n2), 
        ifelse(bil1_md$ma$k == 1, paste0('NA'), paste0(formatC(bil1_md$ma$I2, format='f', digits=0),'%')),
        tbil1$b[[4,6]], 
        'Suppl Fig #9')
-p <- c(paste0('B. ',unique(bil2$intervention), ' vs ', unique(bil2$comparison)), bil2_md$ma$k, 
+p <- c(paste0(unique(bil2$intervention), ' vs ', unique(bil2$comparison)), bil2_md$ma$k, 
        sum(bil2$n1), sum(bil2$n2), 
        ifelse(bil2_md$ma$k == 1, paste0('NA'), paste0(formatC(bil2_md$ma$I2, format='f',                digits=0),'%')),
        tbil2$b[[8,6]], 
        'Suppl Fig #10')
 
 
-q <- c('Mean pain scores (VAS)', rep(NA, 6))
+q <- c('B. Mean pain scores (VAS)', rep(NA, 6))
 
 
 
-r <- c(paste0('C. ', unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$comparison), ' (',
+r <- c(paste0(unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$comparison), ' (',
         paste0(unique(pain2_fu1$pre$followup)), ') '), pain2_fu1$ma$k, 
        sum(pain2_fu1$pre$n1), sum(pain2_fu1$pre$n2), 
        ifelse(pain2_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu1$ma$I2, format='f', digits=0),'%')),
@@ -1010,13 +1010,13 @@ r <- c(paste0('C. ', unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu
        'Suppl Fig #11')
 
 
-s <- c(paste0('D. ', unique(pain2_fu2$pre$intervention), ' vs ', unique(pain2_fu2$pre$comparison), ' (',
+s <- c(paste0(unique(pain2_fu2$pre$intervention), ' vs ', unique(pain2_fu2$pre$comparison), ' (',
         paste0(unique(pain2_fu2$pre$followup)), ') '), pain2_fu2$ma$k, 
        sum(pain2_fu2$pre$n1), sum(pain2_fu2$pre$n2), 
        ifelse(pain2_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu2$ma$I2, format='f', digits=0),'%')),
        tpain2_fu2$b[[4,7]], 
        'Suppl Fig #11')
-t <- c(paste0('E. ', unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$comparison), ' (',
+t <- c(paste0(unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$comparison), ' (',
         paste0(unique(pain2_fu3$pre$followup)), ') '), pain2_fu3$ma$k, 
        sum(pain2_fu3$pre$n1), sum(pain2_fu3$pre$n2), 
        ifelse(pain2_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu3$ma$I2, format='f', digits=0),'%')),
@@ -1025,19 +1025,19 @@ t <- c(paste0('E. ', unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu
 
                   
 
-u <- c(paste0('F. ', unique(pain3_fu1$pre$intervention), ' vs ', unique(pain3_fu1$pre$comparison), ' (',
+u <- c(paste0(unique(pain3_fu1$pre$intervention), ' vs ', unique(pain3_fu1$pre$comparison), ' (',
         paste0(unique(pain3_fu1$pre$followup)), ') '), pain3_fu1$ma$k, 
        sum(pain3_fu1$pre$n1), sum(pain3_fu1$pre$n2), 
        ifelse(pain3_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu1$ma$I2, format='f', digits=0),'%')),
        tpain3_fu1$b[[8,6]], 
        'Suppl Fig #12')
-v <- c(paste0('G. ', unique(pain3_fu2$pre$intervention), ' vs ', unique(pain3_fu2$pre$comparison), ' (',
+v <- c(paste0(unique(pain3_fu2$pre$intervention), ' vs ', unique(pain3_fu2$pre$comparison), ' (',
         paste0(unique(pain3_fu2$pre$followup)), ') '), pain3_fu2$ma$k, 
        sum(pain3_fu2$pre$n1), sum(pain3_fu2$pre$n2), 
        ifelse(pain3_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu2$ma$I2, format='f', digits=0),'%')),
        tpain3_fu2$b[[7,6]], 
        'Suppl Fig #13')
-w <- c(paste0('H. ', unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$comparison), ' (',
+w <- c(paste0(unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$comparison), ' (',
         paste0(unique(pain3_fu3$pre$followup)), ') '), pain3_fu3$ma$k, 
        sum(pain3_fu3$pre$n1), sum(pain3_fu3$pre$n2), 
        ifelse(pain3_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu3$ma$I2, format='f', digits=0),'%')),
@@ -1046,13 +1046,13 @@ w <- c(paste0('H. ', unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu
 
 
 
-x <- c('Mean hospital length of stay (days)', rep(NA, 6))
-y <- c(paste0('I. ', unique(hospital1$intervention), ' vs ', unique(hospital1$comparison)), hospital1_md$ma$k, 
+x <- c('C. Mean hospital length of stay (days)', rep(NA, 6))
+y <- c(paste0(unique(hospital1$intervention), ' vs ', unique(hospital1$comparison)), hospital1_md$ma$k, 
        sum(hospital1$n1), sum(hospital1$n2), 
        ifelse(hospital1_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital1_md$ma$I2, format='f', digits=0),'%')),
        thospital1$b[[4,6]], 
        'Suppl Fig #15')
-z <- c(paste0('J. ', unique(hospital2$intervention), ' vs ', unique(hospital2$comparison)), hospital2_md$ma$k, 
+z <- c(paste0(unique(hospital2$intervention), ' vs ', unique(hospital2$comparison)), hospital2_md$ma$k, 
        sum(hospital2$n1), sum(hospital2$n2), 
        ifelse(hospital2_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital2_md$ma$I2, format='f',                digits=0),'%')),
        thospital2$b[[9,6]], 
