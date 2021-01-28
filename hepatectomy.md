@@ -93,6 +93,47 @@ after RLDRH versus ODRH</summary>
 
 </details>
 
+## Summary of forest plots - *Recipient Patients*
+
+</details>
+
+### Supplementary figure 9
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean blood loss (mL) after
+RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/blood_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 10
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean ALT peak levels (IU/L)
+after RLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/alt_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+### Supplementary figure 11
+
+<details>
+
+<summary><b>Show figure</b> - Difference in mean AST peak levels (U/L)
+afterRLDRH versus ODRH</summary>
+
+![](hepatectomy_files/figure-gfm/ast_ODRH_recipient-1.svg)<!-- -->
+
+</details>
+
+# Overall1
+
+![](hepatectomy_files/figure-gfm/overall_continuous_donor1-1.svg)<!-- -->
+
 ### Supplementary figure 9
 
 <details>
@@ -191,10 +232,6 @@ scores (VAS) at day 0-1 </summary>
 
 </details>
 
-# Overall1
-
-![](hepatectomy_files/figure-gfm/overall_continuous_donor1-1.svg)<!-- -->
-
 # Overall2
 
 ![](hepatectomy_files/figure-gfm/overall_continuous_donor2-1.svg)<!-- -->
@@ -245,8 +282,6 @@ Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
 
 ## Summary of forest plots - *Recipient Patients*
 
-</details>
-
 ### Figure 20
 
 <details>
@@ -266,39 +301,6 @@ Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
 (days) after RLDRH versus ODRH</summary>
 
 ![](hepatectomy_files/figure-gfm/hospitalstay_ODRH_recipient-1.svg)<!-- -->
-
-</details>
-
-### Figure 22
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean blood loss (mL) after
-RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/blood_ODRH_recipient-1.svg)<!-- -->
-
-</details>
-
-### Figure 23
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean AST peak levels (U/L)
-afterRLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/ast_ODRH_recipient-1.svg)<!-- -->
-
-</details>
-
-### Figure 24
-
-<details>
-
-<summary><b>Show figure</b> - Difference in mean ALT peak levels (IU/L)
-after RLDRH versus ODRH</summary>
-
-![](hepatectomy_files/figure-gfm/alt_ODRH_recipient-1.svg)<!-- -->
 
 </details>
 

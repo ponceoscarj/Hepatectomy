@@ -554,6 +554,287 @@ plot <- plotmd_single_studies(words = tast2$b,
 
 </details>
 
+
+
+
+
+
+## Summary of forest plots - *Recipient Patients*
+
+```{r cleaning_continuous_recipient, echo=FALSE, message=FALSE, warning=FALSE}
+e <- read.csv("6 Extracted Data/outcome_continuous_recipient.csv")
+e <- e[c(1:9),]
+e2 <- e[!is.na(e$comparison),]
+
+names(e2)[10] <- 'n1'
+names(e2)[11] <- 'n2'
+names(e2)[12] <- 'mean_post1'
+names(e2)[13] <- 'sd_post1'
+names(e2)[14] <- 'mean_post2'
+names(e2)[15] <- 'sd_post2'
+
+e2$outcome[e2$outcome == 'Peak ASL level'] <- 'Peak ALT level'
+
+
+e2[,c(12:15)] <- lapply(e2[,c(12:15)], as.numeric)
+
+
+e2$author <- 
+  ifelse(e2$refid==9, paste("Rho et al., 2020"),
+  ifelse(e2$refid==27, paste("Broering et al., 2020"),
+  ifelse(e2$refid==5, paste("Binoj et al., 2020"),
+  ifelse(e2$refid==172, paste("Chen et al., 2016"),
+  ifelse(e2$refid==74, paste("Cheah et al., 2019"),
+  ifelse(e2$refid==239, paste("Martucci et al., 2013"),
+  ifelse(e2$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
+```
+
+
+</details>
+
+
+
+
+
+
+### Supplementary figure 9
+<details><summary><b>Show figure</b> - Difference in mean blood loss (mL) after RLDRH versus ODRH</summary>
+
+```{r blood_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+blood3 <- subset(e2, comparison=='ODRH' & outcome=='Estimated blood loss')
+
+blood3_md <- md(blood3)
+
+tblood3 <- table_md(analysis = blood3_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Blood loss (mL)', col = 'Mean (SD)', 
+                    follow = FALSE)
+
+
+plot <- plotmd_single_studies(words = tblood3$b,
+                      numbers = tblood3$c,
+                      fpPosition = ncol(tblood3$b),
+                      xtick = c(-1500, -500, 0, 500, 1500, 2500),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+
+</details>
+
+
+
+
+### Supplementary figure 10
+<details><summary><b>Show figure</b> - Difference in mean ALT peak levels (IU/L) after RLDRH versus ODRH</summary>
+
+```{r alt_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+alt3 <- subset(e2, comparison=='ODRH' & outcome=='Peak ALT level')
+
+alt3_md <- md(alt3)
+
+talt3 <- table_md(analysis = alt3_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'ALT (IU/L)', col = 'Mean (SD)', 
+                    follow = FALSE)
+
+
+plot <- plotmd_single_studies(words = talt3$b,
+                      numbers = talt3$c,
+                      fpPosition = ncol(talt3$b),
+                      xtick = c(-50,-30,  -10, 0, 10, 30,  50),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+
+</details>
+
+
+
+
+
+### Supplementary figure 11
+<details><summary><b>Show figure</b> - Difference in mean AST peak levels (U/L) afterRLDRH versus ODRH</summary>
+
+```{r ast_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+ast3 <- subset(e2, comparison=='ODRH' & outcome=='Peak AST level')
+
+ast3_md <- md(ast3)
+
+tast3 <- table_md(analysis = ast3_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'AST (U/L)', col = 'Mean (SD)', 
+                    follow = FALSE)
+
+
+plot <- plotmd_single_studies(words = tast3$b,
+                      numbers = tast3$c,
+                      fpPosition = ncol(tast3$b),
+                      xtick = c(-2,-1,0,1,2),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+
+</details>
+
+
+
+
+# Overall1
+```{r overall_continuous_donor1, fig.height=10, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+
+a1 <- c('Outcome', 'N of studies', 
+       'Amr1 (n)', 'Arm2 (n)', 
+       'I2', 
+       paste0('Mean Difference (MD)','\n','95%CI'), 
+       paste0('Figure with','\n', 'Detailed Information'))
+
+head1 <- c('Donor patients', rep(NA, 6))
+
+b <- c('A. Mean total operative time (min)', rep(NA, 6))
+c <- c(paste0(surt1$intervention, ' vs ', surt1$comparison), surt1_md$ma$k, 
+       sum(surt1$n1), sum(surt1$n2), 'NA', tsurt1$b[[4,6]], 
+       'Suppl Fig #1')
+d <- c(paste0(unique(surt2$intervention), ' vs ', unique(surt2$comparison)), surt2_md$ma$k, 
+       sum(surt2$n1), sum(surt2$n2), 
+       ifelse(surt2_md$ma$k == 1, paste('NA'), paste0(formatC(surt2_md$ma$I2, format='f', digits=0), '%')),
+       tsurt2$b[[9,6]], 
+       'Suppl Fig #2')
+
+
+e <- c('B. Mean blood loss (mL)', rep(NA, 6))
+f <- c(paste0(unique(blood1$intervention), ' vs ', unique(blood1$comparison)), blood1_md$ma$k, 
+       sum(blood1$n1), sum(blood1$n2), 'NA', tblood1$b[[4,6]], 
+       'Suppl Fig #3')
+g <- c(paste0(unique(blood2$intervention), ' vs ', unique(blood2$comparison)), blood2_md$ma$k, 
+       sum(blood2$n1), sum(blood2$n2), 
+       ifelse(blood2_md$ma$k == 1, paste('NA'), paste0(formatC(blood2_md$ma$I2, format='f', digits=0),'%')),
+       tblood2$b[[9,6]], 
+       'Suppl Fig #4')
+
+
+
+h <- c('C. Mean peak ALT levels (UI/L)', rep(NA, 6))
+i <- c(paste0(unique(alt1$intervention), ' vs ', unique(alt1$comparison)), alt1_md$ma$k, 
+       sum(alt1$n1), sum(alt1$n2), 
+       ifelse(alt1_md$ma$k == 1, paste('NA'), paste0(formatC(alt1_md$ma$I2, format='f', digits=0),'%')),
+       talt1$b[[4,6]], 
+       'Suppl Fig #5')
+j <- c(paste0(unique(alt2$intervention), ' vs ', unique(alt2$comparison)), alt2_md$ma$k, 
+       sum(alt2$n1), sum(alt2$n2), 
+       ifelse(alt2_md$ma$k == 1, paste('NA'), paste0(formatC(alt2_md$ma$I2, format='f',                digits=0),'%')),
+       talt2$b[[8,6]], 
+       'Suppl Fig #6')
+
+k <- c('D. Mean peak AST levels (UI/L)', rep(NA, 6))
+l <- c(paste0(unique(ast1$intervention), ' vs ', unique(ast1$comparison)), ast1_md$ma$k, 
+       sum(ast1$n1), sum(ast1$n2), 
+       ifelse(ast1_md$ma$k == 1, paste('NA'), paste0(formatC(ast1_md$ma$I2, format='f', digits=0),'%')),
+       tast1$b[[4,6]], 
+       'Suppl Fig #7')
+m <- c(paste0(unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_md$ma$k, 
+       sum(ast2$n1), sum(ast2$n2), 
+       ifelse(ast2_md$ma$k == 1, paste('NA'), paste0(formatC(ast2_md$ma$I2, format='f',                digits=0),'%')),
+       tast2$b[[8,6]], 
+       'Suppl Fig #8')
+
+
+
+head2 <- c('Recipient patients', rep(NA, 6))
+
+
+
+n <- c('E. Mean blood loss (mL)', rep(NA, 6))
+o <- c(paste0(unique(blood3$intervention), ' vs ', unique(blood3$comparison)), blood3_md$ma$k, 
+       sum(blood3$n1), sum(blood3$n2), 'NA', tblood3$b[[4,6]], 
+       'Suppl Fig #9')
+
+
+p <- c('F. Mean peak ALT levels (UI/L)', rep(NA, 6))
+q <- c(paste0(unique(alt3$intervention), ' vs ', unique(alt3$comparison)), alt3_md$ma$k, 
+       sum(alt3$n1), sum(alt3$n2), 
+       ifelse(alt3_md$ma$k == 1, paste('NA'), paste0(formatC(alt3_md$ma$I2, format='f', digits=0),'%')),
+       talt3$b[[4,6]], 
+       'Suppl Fig #10')
+
+r <- c('G. Mean peak AST levels (UI/L)', rep(NA, 6))
+s <- c(paste0(unique(ast3$intervention), ' vs ', unique(ast3$comparison)), ast3_md$ma$k, 
+       sum(ast3$n1), sum(ast3$n2), 
+       ifelse(ast3_md$ma$k == 1, paste('NA'), paste0(formatC(ast3_md$ma$I2, format='f', digits=0),'%')),
+       tast3$b[[4,6]], 
+       'Suppl Fig #11')
+
+
+overall1 <- rbind(a1, NA, NA,
+                  head1, NA, b,c,d, NA, e,f,g, NA, h,i,j, NA, k,l,m, NA, NA,
+                  head2, NA, n,o, NA, p,q, NA, r,s, NA)
+overall1 <- as.data.frame(overall1)
+
+rownames(overall1) <- NULL
+
+sub1 <- c(7,8,11,12,15,16, 19,20, 26, 29, 32) 
+overall1[,1][sub1] <- paste("       ",overall1[,1][sub1])
+
+sub2 <- c(6,10,14,18,25,28,31) 
+overall1[,1][sub2] <- paste("   ",overall1[,1][sub2])
+
+
+
+toverall1 <- rbind(NA, NA, NA, NA, NA, NA, tsurt1$c[4,], tsurt2$c[9,],
+                  NA, NA, tblood1$c[4,], tblood2$c[9,],
+                  NA, NA, talt1$c[4,], talt2$c[8,],
+                  NA, NA, tast1$c[4,], tast2$c[8,], 
+                  NA, NA, NA, NA, NA, tblood3$c[4,], 
+                  NA, NA,  talt3$c[4,],
+                  NA, NA, tast3$c[4,], NA)
+
+
+toverall1 <- structure(list(
+          mean = c(toverall1$mean),
+          lower = c(toverall1$lower),
+          upper = c(toverall1$upper)),
+          .Names = c("mean", "lower", "upper"),
+          row.names = c(NA, (-1L*nrow(toverall1))),
+          class = "data.frame")
+
+
+plot1 <- forestplot(overall1,
+             graph.pos = 6,
+             zero = 0,
+             toverall1,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
+             lineheight=unit(0.7,'cm'),
+             boxsize = 0.5,
+             line.margin = 2,
+             is.summary = c(T, rep(F,2), T, F, T, rep(F,3), T, rep(F,3), T, rep(F,3), T, rep(F,3), 
+                            F, T, F, T, rep(F,2), T, rep(F,2), T, rep(F,2)),
+             align = c('l', rep('c',4), 'l'),
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
+                              ticks = gpar(cex = 0.9, fontface="bold"),
+                              summary = gpar(cex = 0.9),
+                              xlab = gpar(cex=0.9)),
+             xticks = c(-250, -100, 0, 100, 250, 500, 750),
+             xlog=FALSE,
+             clip = c(0.2, 32),
+             grid = c(-250, -100, 0, 100, 250, 500, 750),
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             lwd.zero = 2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
+
+
+```
+
+
+
+
+
 ### Supplementary figure 9
 <details><summary><b>Show figure</b> - Difference in mean peak total bilirubin levels (mg/dL) after RLDRH versus LADRH</summary>
 
@@ -850,131 +1131,6 @@ plot <- plotmd_single_studies(words = thospital2$b,
 
 
 
-# Overall1
-```{r overall_continuous_donor1, fig.height=6, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
-
-a1 <- c('Outcome', 'N of studies', 
-       'Amr1 (n)', 'Arm2 (n)', 
-       'I2', 
-       paste0('Mean Difference (MD)','\n','95%CI'), 
-       paste0('Figure with','\n', 'Detailed Information'))
-
-b <- c('A. Mean total operative time (min)', rep(NA, 6))
-c <- c(paste0(surt1$intervention, ' vs ', surt1$comparison), surt1_md$ma$k, 
-       sum(surt1$n1), sum(surt1$n2), 'NA', tsurt1$b[[4,6]], 
-       'Suppl Fig #1')
-d <- c(paste0(unique(surt2$intervention), ' vs ', unique(surt2$comparison)), surt2_md$ma$k, 
-       sum(surt2$n1), sum(surt2$n2), 
-       ifelse(surt2_md$ma$k == 1, paste('NA'), paste0(formatC(surt2_md$ma$I2, format='f', digits=0), '%')),
-       tsurt2$b[[9,6]], 
-       'Suppl Fig #2')
-
-
-e <- c('B. Mean blood loss (mL)', rep(NA, 6))
-f <- c(paste0(unique(blood1$intervention), ' vs ', unique(blood1$comparison)), blood1_md$ma$k, 
-       sum(blood1$n1), sum(blood1$n2), 'NA', tblood1$b[[4,6]], 
-       'Suppl Fig #3')
-g <- c(paste0(unique(blood2$intervention), ' vs ', unique(blood2$comparison)), blood2_md$ma$k, 
-       sum(blood2$n1), sum(blood2$n2), 
-       ifelse(blood2_md$ma$k == 1, paste('NA'), paste0(formatC(blood2_md$ma$I2, format='f', digits=0),'%')),
-       tblood2$b[[9,6]], 
-       'Suppl Fig #4')
-
-
-
-h <- c('C. Mean peak ALT levels (UI/L)', rep(NA, 6))
-i <- c(paste0(unique(alt1$intervention), ' vs ', unique(alt1$comparison)), alt1_md$ma$k, 
-       sum(alt1$n1), sum(alt1$n2), 
-       ifelse(alt1_md$ma$k == 1, paste('NA'), paste0(formatC(alt1_md$ma$I2, format='f', digits=0),'%')),
-       talt1$b[[4,6]], 
-       'Suppl Fig #5')
-j <- c(paste0(unique(alt2$intervention), ' vs ', unique(alt2$comparison)), alt2_md$ma$k, 
-       sum(alt2$n1), sum(alt2$n2), 
-       ifelse(alt2_md$ma$k == 1, paste('NA'), paste0(formatC(alt2_md$ma$I2, format='f',                digits=0),'%')),
-       talt2$b[[8,6]], 
-       'Suppl Fig #6')
-
-k <- c('D. Mean peak AST levels (UI/L)', rep(NA, 6))
-l <- c(paste0(unique(ast1$intervention), ' vs ', unique(ast1$comparison)), ast1_md$ma$k, 
-       sum(ast1$n1), sum(ast1$n2), 
-       ifelse(ast1_md$ma$k == 1, paste('NA'), paste0(formatC(ast1_md$ma$I2, format='f', digits=0),'%')),
-       tast1$b[[4,6]], 
-       'Suppl Fig #7')
-m <- c(paste0(unique(ast2$intervention), ' vs ', unique(ast2$comparison)), ast2_md$ma$k, 
-       sum(ast2$n1), sum(ast2$n2), 
-       ifelse(ast2_md$ma$k == 1, paste('NA'), paste0(formatC(ast2_md$ma$I2, format='f',                digits=0),'%')),
-       tast2$b[[8,6]], 
-       'Suppl Fig #8')
-
-
-
-
-overall1 <- rbind(a1,b,c,d,e,f,g,h,i,j,k,l,m)
-overall1 <- as.data.frame(overall1)
-
-rownames(overall1) <- NULL
-
-overall1 <- overall1 %>% add_row(.after = 1)
-overall1 <- overall1 %>% add_row(.after = 1)
-overall1 <- overall1 %>% add_row(.after = 6)
-
-overall1 <- overall1 %>% add_row(.after = 10)
-overall1 <- overall1 %>% add_row(.after = 14)
-overall1 <- overall1 %>% add_row(.after = 18)
-
-
-sub1 <- c(5,6,9,10,13,14,17,18) 
-overall1[,1][sub1] <- paste("      ",overall1[,1][sub1])
-
-
-
-toverall1 <- rbind(NA, NA, NA, NA, tsurt1$c[4,], tsurt2$c[9,],
-                  NA, NA, tblood1$c[4,], tblood2$c[9,],
-                  NA, NA, talt1$c[4,], talt2$c[8,],
-                  NA, NA, tast1$c[4,], tast2$c[8,], NA)
-
-
-toverall1 <- structure(list(
-          mean = c(toverall1$mean),
-          lower = c(toverall1$lower),
-          upper = c(toverall1$upper)),
-          .Names = c("mean", "lower", "upper"),
-          row.names = c(NA, (-1L*nrow(toverall1))),
-          class = "data.frame")
-
-
-forestplot(overall1,
-             graph.pos = 6,
-             zero = 0,
-             toverall1,
-             new_page = TRUE,
-             colgap = unit(5, "mm"),
-             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
-             lineheight=unit(0.7,'cm'),
-             boxsize = 0.5,
-             line.margin = 2,
-             is.summary = c(T, rep(F,2), T, rep(F,3), T, rep(F,3), T, rep(F,3), T, rep(F,3)),
-             align = c('l', rep('c',4), 'l'),
-             ci.vertices = TRUE,
-             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
-                              ticks = gpar(cex = 0.9, fontface="bold"),
-                              summary = gpar(cex = 0.9),
-                              xlab = gpar(cex=0.9)),
-             xticks = c(-250, -150,-50,0,50,150, 250),
-             xlog=FALSE,
-             clip = c(0.2, 32),
-             grid = c(-250, -150,-50,0,50,150, 250),
-             lwd.xaxis = 1,
-             lwd.ci = 2.2,
-             lwd.zero = 2,
-             graphwidth = unit(10,"cm"),
-             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
-
-
-```
-
-
-
 # Overall2
 ```{r overall_continuous_donor2, fig.height=6, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -1091,7 +1247,7 @@ toverall2 <- structure(list(
           class = "data.frame")
 
 
-forestplot(overall2,
+plot2 <- forestplot(overall2,
              graph.pos = 6,
              zero = 0,
              toverall2,
@@ -1117,9 +1273,6 @@ forestplot(overall2,
              lwd.zero = 2,
              graphwidth = unit(10,"cm"),
              col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
-
-
-
 
 ```
 
@@ -1267,38 +1420,6 @@ plot <- plotrr_single_studies(words = tcomp4$b,
 
 ## Summary of forest plots - *Recipient Patients*
 
-```{r cleaning_continuous_recipient, echo=FALSE, message=FALSE, warning=FALSE}
-e <- read.csv("6 Extracted Data/outcome_continuous_recipient.csv")
-e <- e[c(1:9),]
-e2 <- e[!is.na(e$comparison),]
-
-names(e2)[10] <- 'n1'
-names(e2)[11] <- 'n2'
-names(e2)[12] <- 'mean_post1'
-names(e2)[13] <- 'sd_post1'
-names(e2)[14] <- 'mean_post2'
-names(e2)[15] <- 'sd_post2'
-
-e2$outcome[e2$outcome == 'Peak ASL level'] <- 'Peak ALT level'
-
-
-e2[,c(12:15)] <- lapply(e2[,c(12:15)], as.numeric)
-
-
-e2$author <- 
-  ifelse(e2$refid==9, paste("Rho et al., 2020"),
-  ifelse(e2$refid==27, paste("Broering et al., 2020"),
-  ifelse(e2$refid==5, paste("Binoj et al., 2020"),
-  ifelse(e2$refid==172, paste("Chen et al., 2016"),
-  ifelse(e2$refid==74, paste("Cheah et al., 2019"),
-  ifelse(e2$refid==239, paste("Martucci et al., 2013"),
-  ifelse(e2$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
-```
-
-
-</details>
-
-
 
 ### Figure 20
 <details><summary><b>Show figure</b> - Difference in mean length of hospital stay (days) after RLDRH versus LADRH</summary>
@@ -1351,83 +1472,6 @@ plot <- plotmd_single_studies(words = thospital4$b,
 
 </details>
 
-
-### Figure 22
-<details><summary><b>Show figure</b> - Difference in mean blood loss (mL) after RLDRH versus ODRH</summary>
-
-```{r blood_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-blood3 <- subset(e2, comparison=='ODRH' & outcome=='Estimated blood loss')
-
-blood3_md <- md(blood3)
-
-tblood3 <- table_md(analysis = blood3_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Blood loss (mL)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tblood3$b,
-                      numbers = tblood3$c,
-                      fpPosition = ncol(tblood3$b),
-                      xtick = c(-1500, -500, 0, 500, 1500, 2500),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
-
-
-### Figure 23
-<details><summary><b>Show figure</b> - Difference in mean AST peak levels (U/L) afterRLDRH versus ODRH</summary>
-
-```{r ast_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-ast3 <- subset(e2, comparison=='ODRH' & outcome=='Peak AST level')
-
-ast3_md <- md(ast3)
-
-tast3 <- table_md(analysis = ast3_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'AST (U/L)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tast3$b,
-                      numbers = tast3$c,
-                      fpPosition = ncol(tast3$b),
-                      xtick = c(-2,-1,0,1,2),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
-
-
-### Figure 24
-<details><summary><b>Show figure</b> - Difference in mean ALT peak levels (IU/L) after RLDRH versus ODRH</summary>
-
-```{r alt_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-alt3 <- subset(e2, comparison=='ODRH' & outcome=='Peak ALT level')
-
-alt3_md <- md(alt3)
-
-talt3 <- table_md(analysis = alt3_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'ALT (IU/L)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = talt3$b,
-                      numbers = talt3$c,
-                      fpPosition = ncol(talt3$b),
-                      xtick = c(-50,-30,  -10, 0, 10, 30,  50),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
 
 
 ### Figure 25
