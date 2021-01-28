@@ -683,7 +683,7 @@ plot <- plotmd_single_studies(words = tast3$b,
 
 
 # Overall1
-```{r overall_continuous_donor1, fig.height=10, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+```{r overall_continuous_donor1, fig.height=9.5, fig.width=13.5, echo=FALSE, message=FALSE, warning=FALSE}
 
 a1 <- c('Outcome', 'N of studies', 
        'Amr1 (n)', 'Arm2 (n)', 
