@@ -23,44 +23,6 @@ library(Matrix)
 
 ```
 
-
-```{r cleaning_continuous_donor, echo=FALSE, message=FALSE, warning=FALSE}
-#continuous donor
-h <- read.csv("6 Extracted Data/outcome_continuous_donor.csv")
-
-
-h1<-h[!(h$analysis=='no'),]
-
-names(h1)[6] <- "outcome"
-names(h1)[8] <- "followup"
-names(h1)[11] <- 'n1'
-names(h1)[12] <- 'n2'
-names(h1)[13] <- 'mean_post1'
-names(h1)[14] <- 'sd_post1'
-names(h1)[15] <- 'mean_post2'
-names(h1)[16] <- 'sd_post2'
-
-h1[11:16] <- sapply(h1[11:16],as.numeric)
-
-h1$outcome[h1$outcome == 'Estimated blodd loss'] <- 'blood loss'
-h1$outcome[h1$outcome == 'Estimated blood loss'] <- 'blood loss'
-
-h1$intervention[h1$intervention == 'RlDRH'] <- 'RLDRH'
-
-h1$author <- 
-  ifelse(h1$refid==9, paste("Rho et al., 2020"),
-  ifelse(h1$refid==27, paste("Broering et al., 2020"),
-  ifelse(h1$refid==5, paste("Binoj et al., 2020"),
-  ifelse(h1$refid==172, paste("Chen et al., 2016"),
-  ifelse(h1$refid==74, paste("Cheah et al., 2019"),
-  ifelse(h1$refid==239, paste("Martucci et al., 2013"),
-  ifelse(h1$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
-
-#h1[h1$outcome == 'Liver funcion', c(1:3,5,6,7,11:16)]
-
-```
-
-
 ```{r functions_md_rr, echo=FALSE, message=FALSE, warning=FALSE}
 md <- function(database){
   
@@ -191,10 +153,6 @@ plotmd_single_studies <- function(words, numbers,
 
 
 
-
-
-
-
 rr <- function(database){
   db <- database
   db <- escalc(measure="RR", ai=e1, ci=e2, n1i=n1, n2i=n2,data=database)
@@ -279,11 +237,6 @@ table_rr <- function(analysis, int, comp, outcome, nstudies){
   list(b = b, c = c)
 } 
   
-  
-  
-
-
-
 
 plotrr_single_studies <- function(words, numbers, xtick, sizes, 
                                   bolding, aligning, fpPosition){
@@ -317,251 +270,116 @@ plotrr_single_studies <- function(words, numbers, xtick, sizes,
   
   
 }  
-
-
-
-
 ```
 
 
 
-## Summary of forest plots - *Donors Patients*
+
+```{r analysis_continuous_donor1, echo=FALSE, message=FALSE, warning=FALSE}
+h <- read.csv("6 Extracted Data/outcome_continuous_donor.csv")
 
 
+h1<-h[!(h$analysis=='no'),]
+
+names(h1)[6] <- "outcome"
+names(h1)[8] <- "followup"
+names(h1)[11] <- 'n1'
+names(h1)[12] <- 'n2'
+names(h1)[13] <- 'mean_post1'
+names(h1)[14] <- 'sd_post1'
+names(h1)[15] <- 'mean_post2'
+names(h1)[16] <- 'sd_post2'
+
+h1[11:16] <- sapply(h1[11:16],as.numeric)
+
+h1$outcome[h1$outcome == 'Estimated blodd loss'] <- 'blood loss'
+h1$outcome[h1$outcome == 'Estimated blood loss'] <- 'blood loss'
+
+h1$intervention[h1$intervention == 'RlDRH'] <- 'RLDRH'
+
+h1$author <- 
+  ifelse(h1$refid==9, paste("Rho et al., 2020"),
+  ifelse(h1$refid==27, paste("Broering et al., 2020"),
+  ifelse(h1$refid==5, paste("Binoj et al., 2020"),
+  ifelse(h1$refid==172, paste("Chen et al., 2016"),
+  ifelse(h1$refid==74, paste("Cheah et al., 2019"),
+  ifelse(h1$refid==239, paste("Martucci et al., 2013"),
+  ifelse(h1$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
 
 
-### Supplementary Figure 1
-<details><summary><b>Show figure</b> - Difference in mean total operative time (min) after RLDRH versus LADRH</summary>
-
-```{r operativetime1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+#Total operative time (min) RLDRH vs LADRH
 surt <- subset(h1, outcome=='Total operative time')
 surt1 <- subset(surt, comparison=='LADRH')
-
 surt1_md <- md(surt1)
-
 tsurt1 <- table_md(analysis = surt1_md, nstudies = 1, 
                     int = "RLDRH (n)", comp = "LADRH (n)",
                     outcome = 'Total operative time (min)', col = 'Mean (SD)', 
                     follow = FALSE)
 
-
-plot <- plotmd_single_studies(words = tsurt1$b,
-                      numbers = tsurt1$c,
-                      fpPosition = ncol(tsurt1$b),
-                      xtick = c(250, 150, 50, 0, -50, -150, -250),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-
-</details>
-
-
-
-
-### Supplementary Figure 2
-<details><summary><b>Show figure</b> - Difference in mean total operative time (min) after RLDRH versus ODRH</summary>
-
-```{r operativetime2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+#Total operative time (min) RLDRH vs ODRH
 surt2 <- subset(surt, comparison=='ODRH')
-
 surt2_md <- md(surt2)
-
 tsurt2 <- table_md(analysis = surt2_md, nstudies = 3, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Total operative time (min)', col = 'Mean (SD)', 
                     follow = FALSE)
 
-
-plot <- plotmd_single_studies(words = tsurt2$b,
-                      numbers = tsurt2$c,
-                      fpPosition = ncol(tsurt2$b)-1,
-                      xtick = c(-150, -50, 0, 50, 150, 250, 350),
-                      sizes = c(rep(NA,3), 0.02*(surt2_md$pre$weights),NA, 1, NA),
-                      bolding = c(T, rep(F, 7), T, F),
-                      aligning = c('l', rep('c', 4), 'l', 'l'))
-
-```
-
-</details>
-
-  
-### Supplementary figure 3 
-<details><summary> <b>Show figure</b> - Difference in mean blood loss (mL) after RLDRH versus LADRH</summary> 
-  
-```{r blood_loss_1, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+#Blood loss (ml) RLDRH vs LADRH
 blood <- subset(h1, outcome=='blood loss')
 blood1 <- subset(blood, comparison=='LADRH')
-
 blood1_md <- md(blood1)
-
 tblood1 <- table_md(analysis = blood1_md, nstudies = 1, 
                     int = "RLDRH (n)", comp = "LADRH (n)",
                     outcome = 'Blood loss (mL)', col = 'Mean (SD)',
                     follow = FALSE)
 
-plot <- plotmd_single_studies(words = tblood1$b,
-                              numbers = tblood1$c,
-                              fpPosition = ncol(tblood1$b),
-                              xtick = c(-250, -150, -50,0, 50, 150), 
-                              sizes = c(rep(NA,3), 1, NA),
-                              bolding = c(T, F, F,T,F),
-                              aligning = c('l',rep('c',4),'l'))
-```
-
-</details>
-  
-  
-  
-### Supplementary figure 4
-<details><summary><b>Show figure</b> - Difference in mean blood loss (mL) after RLDRH versus ODRH </summary>
-  
-```{r blood_loss2, fig.height = 3, fig.width = 16, echo=FALSE, fig.retina = 2, message=FALSE, warning=FALSE}
+#Blood loss (ml) RLDRH vs ODRH
 blood2 <- subset(blood, comparison=='ODRH')
-
 blood2_md <- md(blood2)
-
 tblood2 <- table_md(analysis = blood2_md, nstudies = 4, 
                     int = "ODRH (n)", comp = "LADRH (n)",
                     outcome = 'Blood Loss (mL)', col = 'Mean (SD)', 
                     follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tblood2$b,
-                              numbers = tblood2$c,
-                              fpPosition = ncol(tblood2$b)-1,
-                              xtick = c(-250, -150, -50, 0, 50, 150, 250), 
-                              sizes = c(rep(NA,3), 0.011*(blood2_md$pre$weights+50), NA, 1,NA),
-                              bolding = c(T, rep(F, 7), T, F),
-                              aligning = c('l', rep('c', 4), 'l', 'l'))
-
-```
-
-</details>
-
-  
-  
-### Supplementary figure 5
-<details><summary><b>Show figure</b> - Difference in mean peak ALT levels  (IU/L) after RLDRH versus LADRH</summary>
-  
-```{r alt1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+#ALT RLDRH vs LADRH
 alt <- subset(h1, outcome=='Peak ALT level')
-
 alt1 <- subset(alt, comparison=='LADRH')
-
-
 alt1_md <- md(alt1)
-
 talt1 <- table_md(analysis = alt1_md, nstudies = 1, 
                   int = "RLDRH (n)", comp = "LADRH (n)",
                   outcome = 'Peak ALT Level (IU/L)', col = 'Mean (SD)', 
                   follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = talt1$b,
-                              numbers = talt1$c,
-                              fpPosition = ncol(talt1$b),
-                              xtick = c(-50, 0, 50, 150),
-                              sizes = c(rep(NA,3), 1, NA),
-                              bolding = c(T, rep(F, 2), T, F),
-                              aligning = c('l', rep('c', 4), 'l'))
-
-```
-
-</details>
-
-  
-### Supplementary figure 6
-<details><summary><b>Show figure</b> - Difference in mean peak ALT levels (IU/L) after RLDRH versus ODRH</summary>
-  
-```{r alt2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+#ALT RLDRH vs ODRH
 alt2 <- subset(alt, comparison=='ODRH')
-
-
 alt2_md <- md(alt2)
-
 talt2 <- table_md(analysis = alt2_md, nstudies = 3, 
                   int = "RLDRH (n)", comp = "ODRH (n)",
                   outcome = 'Peak ALT Level (IU/L)', col = 'Mean (SD)', 
                   follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = talt2$b,
-                              numbers = talt2$c,
-                              fpPosition = ncol(talt2$b)-1,
-                              xtick = c(-250, -150,-50, 0, 50, 150, 250),
-                              sizes = c(rep(NA,3), 0.02*(alt2_md$pre$weights),NA, 1, NA),
-                              bolding = c(T, rep(F, 6), T, F),
-                              aligning = c('l', rep('c', 4), 'l', 'l'))
-
-```
-
-
-</details>
-
-
-### Supplementary figure 7
-<details><summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L) after RLDRH versus LADRH</summary>
-
-```{r ast1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+#AST RLDRH vs LADRH
 ast <- subset(h1, outcome=='Peak AST level')
 ast1 <- subset(ast, comparison=='LADRH')
-
 ast1_md <- md(ast1)
-
 tast1 <- table_md(analysis = ast1_md, nstudies = 1, 
                     int = "RLDRH (n)", comp = "LADRH (n)",
                     outcome = 'Peak AST Level (IU/L)', col = 'Mean (SD)', 
                     follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tast1$b,
-                      numbers = tast1$c,
-                      fpPosition = ncol(tast1$b),
-                      xtick = c(-50, 0, 50, 150),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
-
-
-### Supplementary figure 8
-<details><summary><b>Show figure</b> - Difference in mean peak AST levels (IU/L) after RLDRH versus ODRH</summary>
-
-```{r ast2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+#AST RLDRH vs ODRH
 ast2 <- subset(ast, comparison=='ODRH')
-
 ast2_md <- md(ast2)
-
 tast2 <- table_md(analysis = ast2_md, nstudies = 3, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Peak AST Level (IU/L)', col = 'Mean (SD)', 
                     follow = FALSE)
 
 
-plot <- plotmd_single_studies(words = tast2$b,
-                      numbers = tast2$c,
-                      fpPosition = ncol(tast2$b)-1,
-                      xtick = c(-250, -150,-50, 0, 50, 150, 250),
-                      sizes = c(rep(NA,3), 0.02*(ast2_md$pre$weights),NA, 1, NA),
-                      bolding = c(T, rep(F, 6), T, F),
-                      aligning = c('l', rep('c', 4), 'l', 'l'))
+
+
+
 
 ```
 
-</details>
 
-
-
-
-
-
-## Summary of forest plots - *Recipient Patients*
-
-```{r cleaning_continuous_recipient, echo=FALSE, message=FALSE, warning=FALSE}
+```{r analysis_continuous_recipient1, echo=FALSE, message=FALSE, warning=FALSE}
 e <- read.csv("6 Extracted Data/outcome_continuous_recipient.csv")
 e <- e[c(1:9),]
 e2 <- e[!is.na(e$comparison),]
@@ -587,102 +405,29 @@ e2$author <-
   ifelse(e2$refid==74, paste("Cheah et al., 2019"),
   ifelse(e2$refid==239, paste("Martucci et al., 2013"),
   ifelse(e2$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
-```
 
-
-</details>
-
-
-
-
-
-
-### Supplementary figure 9
-<details><summary><b>Show figure</b> - Difference in mean blood loss (mL) after RLDRH versus ODRH</summary>
-
-```{r blood_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+#Blood loss (ml) RLDRH vs ODRH
 blood3 <- subset(e2, comparison=='ODRH' & outcome=='Estimated blood loss')
-
 blood3_md <- md(blood3)
-
 tblood3 <- table_md(analysis = blood3_md, nstudies = 1, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Blood loss (mL)', col = 'Mean (SD)', 
                     follow = FALSE)
 
-
-plot <- plotmd_single_studies(words = tblood3$b,
-                      numbers = tblood3$c,
-                      fpPosition = ncol(tblood3$b),
-                      xtick = c(-1500, -500, 0, 500, 1500, 2500),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
-
-
-
-
-### Supplementary figure 10
-<details><summary><b>Show figure</b> - Difference in mean ALT peak levels (IU/L) after RLDRH versus ODRH</summary>
-
-```{r alt_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+#ALT RLDRH vs ODRH
 alt3 <- subset(e2, comparison=='ODRH' & outcome=='Peak ALT level')
-
 alt3_md <- md(alt3)
-
 talt3 <- table_md(analysis = alt3_md, nstudies = 1, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'ALT (IU/L)', col = 'Mean (SD)', 
                     follow = FALSE)
 
 
-plot <- plotmd_single_studies(words = talt3$b,
-                      numbers = talt3$c,
-                      fpPosition = ncol(talt3$b),
-                      xtick = c(-50,-30,  -10, 0, 10, 30,  50),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
 ```
 
-</details>
 
 
-
-
-
-### Supplementary figure 11
-<details><summary><b>Show figure</b> - Difference in mean AST peak levels (U/L) afterRLDRH versus ODRH</summary>
-
-```{r ast_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-ast3 <- subset(e2, comparison=='ODRH' & outcome=='Peak AST level')
-
-ast3_md <- md(ast3)
-
-tast3 <- table_md(analysis = ast3_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'AST (U/L)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tast3$b,
-                      numbers = tast3$c,
-                      fpPosition = ncol(tast3$b),
-                      xtick = c(-2,-1,0,1,2),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
-
-
-
-
-# Overall1
+## Figure 2: Continuous Outcomes Part 1
 ```{r overall_continuous_donor1, fig.height=9.5, fig.width=13.5, echo=FALSE, message=FALSE, warning=FALSE}
 
 a1 <- c('Outcome', 'N of studies', 
@@ -759,25 +504,19 @@ q <- c(paste0(unique(alt3$intervention), ' vs ', unique(alt3$comparison)), alt3_
        talt3$b[[4,6]], 
        'Suppl Fig #10')
 
-r <- c('G. Mean peak AST levels (UI/L)', rep(NA, 6))
-s <- c(paste0(unique(ast3$intervention), ' vs ', unique(ast3$comparison)), ast3_md$ma$k, 
-       sum(ast3$n1), sum(ast3$n2), 
-       ifelse(ast3_md$ma$k == 1, paste('NA'), paste0(formatC(ast3_md$ma$I2, format='f', digits=0),'%')),
-       tast3$b[[4,6]], 
-       'Suppl Fig #11')
 
 
 overall1 <- rbind(a1, NA, NA,
                   head1, NA, b,c,d, NA, e,f,g, NA, h,i,j, NA, k,l,m, NA, NA,
-                  head2, NA, n,o, NA, p,q, NA, r,s, NA)
+                  head2, NA, n,o, NA, p,q, NA)
 overall1 <- as.data.frame(overall1)
 
 rownames(overall1) <- NULL
 
-sub1 <- c(7,8,11,12,15,16, 19,20, 26, 29, 32) 
+sub1 <- c(7,8,11,12,15,16, 19,20, 26, 29) 
 overall1[,1][sub1] <- paste("       ",overall1[,1][sub1])
 
-sub2 <- c(6,10,14,18,25,28,31) 
+sub2 <- c(6,10,14,18,25,28) 
 overall1[,1][sub2] <- paste("   ",overall1[,1][sub2])
 
 
@@ -787,8 +526,7 @@ toverall1 <- rbind(NA, NA, NA, NA, NA, NA, tsurt1$c[4,], tsurt2$c[9,],
                   NA, NA, talt1$c[4,], talt2$c[8,],
                   NA, NA, tast1$c[4,], tast2$c[8,], 
                   NA, NA, NA, NA, NA, tblood3$c[4,], 
-                  NA, NA,  talt3$c[4,],
-                  NA, NA, tast3$c[4,], NA)
+                  NA, NA,  talt3$c[4,], NA)
 
 
 toverall1 <- structure(list(
@@ -811,7 +549,7 @@ plot1 <- forestplot(overall1,
              boxsize = 0.5,
              line.margin = 2,
              is.summary = c(T, rep(F,2), T, F, T, rep(F,3), T, rep(F,3), T, rep(F,3), T, rep(F,3), 
-                            F, T, F, T, rep(F,2), T, rep(F,2), T, rep(F,2)),
+                            F, T, F, T, rep(F,2), T, rep(F,2)),
              align = c('l', rep('c',4), 'l'),
              ci.vertices = TRUE,
              txt_gp = fpTxtGp(label =gpar (cex=0.9), 
@@ -820,7 +558,7 @@ plot1 <- forestplot(overall1,
                               xlab = gpar(cex=0.9)),
              xticks = c(-250, -100, 0, 100, 250, 500, 750),
              xlog=FALSE,
-             clip = c(0.2, 32),
+             clip = c(-250, 750),
              grid = c(-250, -100, 0, 100, 250, 500, 750),
              lwd.xaxis = 1,
              lwd.ci = 2.2,
@@ -832,69 +570,167 @@ plot1 <- forestplot(overall1,
 ```
 
 
+**Supplementary information for figure 1**
 
+<details><summary>Suppl. figure 1: Mean total operative time (min) after RLDRH vs LADRH</summary>
 
-
-### Supplementary figure 9
-<details><summary><b>Show figure</b> - Difference in mean peak total bilirubin levels (mg/dL) after RLDRH versus LADRH</summary>
-
-```{r bilirubin1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
-bil <- subset(h1, outcome=='Peak Total Bilirubin')
-bil1 <- subset(bil, comparison=='LADRH')
-
-bil1_md <- md(bil1)
-
-tbil1 <- table_md(analysis = bil1_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "LADRH (n)",
-                    outcome = 'Peak Total Bilirubin (mg/dL)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tbil1$b,
-                      numbers = tbil1$c,
-                      fpPosition = ncol(tbil1$b),
-                      xtick = c(-2,-1,0, 1,2),
+```{r operativetime1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tsurt1$b,
+                      numbers = tsurt1$c,
+                      fpPosition = ncol(tsurt1$b),
+                      xtick = c(250, 150, 50, 0, -50, -150, -250),
                       sizes = c(rep(NA,3), 1, NA),
                       bolding = c(T, rep(F, 2), T, F),
                       aligning = c('l', rep('c', 4), 'l'))
 ```
+</details>
 
+<details><summary>Suppl. figure 2: Mean total operative time (min) after RLDRH vs ODRH</summary>
+
+```{r operativetime2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tsurt2$b,
+                      numbers = tsurt2$c,
+                      fpPosition = ncol(tsurt2$b)-1,
+                      xtick = c(-150, -50, 0, 50, 150, 250, 350),
+                      sizes = c(rep(NA,3), 0.02*(surt2_md$pre$weights),NA, 1, NA),
+                      bolding = c(T, rep(F, 7), T, F),
+                      aligning = c('l', rep('c', 4), 'l', 'l'))
+
+```
+</details>
+
+<details><summary>Suppl. figure 3: Mean blood loss (mL) after RLDRH vs LADRH</summary> 
+  
+```{r blood_loss_1, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tblood1$b,
+                              numbers = tblood1$c,
+                              fpPosition = ncol(tblood1$b),
+                              xtick = c(-250, -150, -50,0, 50, 150), 
+                              sizes = c(rep(NA,3), 1, NA),
+                              bolding = c(T, F, F,T,F),
+                              aligning = c('l',rep('c',4),'l'))
+```
+</details>
+  
+<details><summary>Suppl. figure  4: Mean blood loss (mL) after RLDRH versus ODRH </summary>
+  
+```{r blood_loss2, fig.height = 3, fig.width = 16, echo=FALSE, fig.retina = 2, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tblood2$b,
+                              numbers = tblood2$c,
+                              fpPosition = ncol(tblood2$b)-1,
+                              xtick = c(-250, -150, -50, 0, 50, 150, 250), 
+                              sizes = 
+                                c(rep(NA,3), 0.011*(blood2_md$pre$weights+50), NA, 1,NA),
+                              bolding = c(T, rep(F, 7), T, F),
+                              aligning = c('l', rep('c', 4), 'l', 'l'))
+
+```
+</details>
+
+  
+<details><summary>Suppl. figure 5: Mean peak ALT levels  (IU/L) after RLDRH versus LADRH</summary>
+  
+```{r alt1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = talt1$b,
+                              numbers = talt1$c,
+                              fpPosition = ncol(talt1$b),
+                              xtick = c(-50, 0, 50, 150),
+                              sizes = c(rep(NA,3), 1, NA),
+                              bolding = c(T, rep(F, 2), T, F),
+                              aligning = c('l', rep('c', 4), 'l'))
+
+```
+</details>
+
+  
+<details><summary>Suppl. figure 6: Mean peak ALT levels (IU/L) after RLDRH versus ODRH</summary>
+  
+```{r alt2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = talt2$b,
+                              numbers = talt2$c,
+                              fpPosition = ncol(talt2$b)-1,
+                              xtick = c(-250, -150,-50, 0, 50, 150, 250),
+                              sizes = c(rep(NA,3), 0.02*(alt2_md$pre$weights),NA, 1, NA),
+                              bolding = c(T, rep(F, 6), T, F),
+                              aligning = c('l', rep('c', 4), 'l', 'l'))
+
+```
+</details>
+
+
+<details><summary>Suppl. figure 7: Mean peak AST levels (IU/L) after RLDRH versus LADRH</summary>
+
+```{r ast1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tast1$b,
+                      numbers = tast1$c,
+                      fpPosition = ncol(tast1$b),
+                      xtick = c(-50, 0, 50, 150),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+</details>
+
+<details><summary>Suppl. figure 8: Mean peak AST levels (IU/L) after RLDRH versus ODRH</summary>
+
+```{r ast2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tast2$b,
+                      numbers = tast2$c,
+                      fpPosition = ncol(tast2$b)-1,
+                      xtick = c(-250, -150,-50, 0, 50, 150, 250),
+                      sizes = c(rep(NA,3), 0.02*(ast2_md$pre$weights),NA, 1, NA),
+                      bolding = c(T, rep(F, 6), T, F),
+                      aligning = c('l', rep('c', 4), 'l', 'l'))
+
+```
+</details>
+
+<details><summary>Suppl. figure 9: Mean blood loss (mL) after RLDRH versus ODRH</summary>
+
+```{r blood_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tblood3$b,
+                      numbers = tblood3$c,
+                      fpPosition = ncol(tblood3$b),
+                      xtick = c(-1500, -500, 0, 500, 1500, 2500),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+</details>
+
+<details><summary>Suppl. figure 10: Mean ALT peak levels (IU/L) after RLDRH versus ODRH</summary>
+
+```{r alt_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = talt3$b,
+                      numbers = talt3$c,
+                      fpPosition = ncol(talt3$b),
+                      xtick = c(-50,-30,  -10, 0, 10, 30,  50),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
 </details>
 
 
 
-### Supplementary figure 10
-<details><summary><b>Show figure</b> - Difference in peak total bilirubin levels (mg/dL) after RLDRH versus ODRH</summary>
-
-```{r bilirubin2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+```{r analysis_continuous_donor2, echo=FALSE, message=FALSE, warning=FALSE}
+# Bilirubin RLDRH vs LADRH
+bil <- subset(h1, outcome=='Peak Total Bilirubin')
+bil1 <- subset(bil, comparison=='LADRH')
+bil1_md <- md(bil1)
+tbil1 <- table_md(analysis = bil1_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "LADRH (n)",
+                    outcome = 'Peak Total Bilirubin (mg/dL)', col = 'Mean (SD)', 
+                    follow = FALSE)
+# Bilirubin RLDRH vs ODRH
 bil2 <- subset(bil, comparison=='ODRH')
-
 bil2_md <- md(bil2)
-
 tbil2 <- table_md(analysis = bil2_md, nstudies = 3, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Peak Total Bilirubin (mg/dL)', col = 'Mean (SD)', 
                     follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tbil2$b,
-                      numbers = tbil2$c,
-                      fpPosition = ncol(tbil2$b)-1,
-                      xtick = c(-2,-1,0, 1,2),
-                      sizes = c(rep(NA,3), 0.02*(bil2_md$pre$weights),NA, 1, NA),
-                      bolding = c(T, rep(F, 6), T, F),
-                      aligning = c('l', rep('c', 4), 'l', 'l'))
-```
-
-
-</details>
-
-### Supplementary figure 11
-<details><summary><b>Show figure</b> - Difference in mean pain scores (VAS) after RLDRH versus LADRH</summary>
-
-```{r pain2, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+# Pain RLDRH vs LADRH
 pain <- subset(h1, outcome=='Pain score')
-
 pain1 <- subset(pain, comparison=='LADRH')
 
 pain2_fu1 <- subset(pain1, followup=='day 0-1')
@@ -903,22 +739,315 @@ tpain2_fu1 <- table_md(analysis = pain2_fu1, nstudies = 1,
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow = TRUE)
 
-
 pain2_fu2 <- subset(pain1, followup=='day 2-3')
 pain2_fu2 <- md(pain2_fu2)
 tpain2_fu2 <- table_md(analysis = pain2_fu2, nstudies = 1, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow= TRUE)
 
-
-
 pain2_fu3 <- subset(pain1, followup=='day >3')
 pain2_fu3 <- md(pain2_fu3)
 tpain2_fu3 <- table_md(analysis = pain2_fu3, nstudies = 1, 
                     int = "RLDRH (n)", comp = "ODRH (n)",
                     outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow= TRUE)
+# Pain RLDRH vs ODRH
+pain2 <- subset(pain, comparison=='ODRH')
+
+pain3_fu1 <- subset(pain2, followup=='day 0-1')
+pain3_fu1 <- md(pain3_fu1)
+tpain3_fu1 <- table_md(analysis = pain3_fu1, nstudies = 3, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow=FALSE)
+
+pain3_fu2 <- subset(pain2, followup=='day 2-3')
+pain3_fu2 <- md(pain3_fu2)
+tpain3_fu2 <- table_md(analysis = pain3_fu2, nstudies = 3, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow=FALSE)
+
+pain3_fu3 <- subset(pain2, followup=='day >3')
+pain3_fu3 <- md(pain3_fu3)
+tpain3_fu3 <- table_md(analysis = pain3_fu3, nstudies = 3, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow=FALSE)
+# Length of stay RLDRH vs LADRH
+hospital <- subset(h1, outcome=='Hospital stay')
+hospital1 <- subset(hospital, comparison=='LADRH')
+hospital1_md <- md(hospital1)
+thospital1 <- table_md(analysis = hospital1_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "LADRH (n)",
+                    outcome = 'Length of stay (days)', col = 'Mean (SD)', 
+                    follow = FALSE)
+# Length of stay RLDRH vs ODRH
+hospital2 <- subset(hospital, comparison=='ODRH')
+hospital2_md <- md(hospital2)
+thospital2 <- table_md(analysis = hospital2_md, nstudies = 3, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Length of stay (days)', col = 'Mean (SD)')
 
 
+
+
+
+```
+
+
+
+```{r analysis_continuous_recipient2, echo=FALSE, message=FALSE, warning=FALSE}
+#AST RLDRH vs ODRH
+ast3 <- subset(e2, comparison=='ODRH' & outcome=='Peak AST level')
+ast3_md <- md(ast3)
+tast3 <- table_md(analysis = ast3_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'AST (U/L)', col = 'Mean (SD)', 
+                    follow = FALSE)
+#Bilirubin RLDRH vs ODRH
+bil3 <- subset(e2, comparison=='ODRH' & outcome=='Peak Total Bilirubin')
+bil3_md <- md(bil3)
+tbil3 <- table_md(analysis = bil3_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Peak Total Bilirubin (mg/dL)', col = 'Mean (SD)', 
+                    follow = FALSE)
+#Length of stay (days) RLDRH vs LADRH
+hospital3 <- subset(e2, comparison=='LADRH')
+hospital3_md <- md(hospital3)
+thospital3 <- table_md(analysis = hospital3_md, nstudies = 1, 
+                    int = "RLDRH (n)", comp = "LADRH (n)",
+                    outcome = 'Length of stay (days)', col = 'Mean (SD)', 
+                    follow = FALSE)
+#Length of stay (days) RLDRH vs ODRH
+hospital4 <- subset(e2, comparison=='ODRH' & outcome=='Hospital stay')
+hospital4_md <- md(hospital4)
+thospital4 <- table_md(analysis = hospital4_md, nstudies = 3, 
+                    int = "RLDRH (n)", comp = "ODRH (n)",
+                    outcome = 'Length of stay (days)', col = 'Mean (SD)')
+
+```
+
+
+
+## Figure 3: Continuous Outcomes Part 2
+```{r overall_continuous2, fig.height=10, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+
+title <- c('Outcome', 'N of studies', 
+       'Amr1 (n)', 'Arm2 (n)', 
+       'I2', 
+       paste0('Mean Difference (MD)','\n','95%CI'), 
+       paste0('Figure with','\n', 'Detailed Information'))
+
+
+head3 <- c('Donor patients', rep(NA, 6))
+
+
+a1 <- c('A. Mean bilirubin levels (mg/dL)', rep(NA, 6))
+b1 <- c(paste0(unique(bil1$intervention), ' vs ', unique(bil1$comparison)), bil1_md$ma$k, 
+       sum(bil1$n1), sum(bil1$n2), 
+       ifelse(bil1_md$ma$k == 1, paste0('NA'), paste0(formatC(bil1_md$ma$I2, format='f', digits=0),'%')),
+       tbil1$b[[4,6]], 
+       'Suppl Fig #11')
+c1 <- c(paste0(unique(bil2$intervention), ' vs ', unique(bil2$comparison)), bil2_md$ma$k, 
+       sum(bil2$n1), sum(bil2$n2), 
+       ifelse(bil2_md$ma$k == 1, paste0('NA'), paste0(formatC(bil2_md$ma$I2, format='f',                digits=0),'%')),
+       tbil2$b[[8,6]], 
+       'Suppl Fig #12')
+
+
+d1 <- c('B. Mean pain scores (VAS)', rep(NA, 6))
+
+
+
+e1 <- c(paste0(unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$comparison), ' (',
+        paste0(unique(pain2_fu1$pre$followup)), ') '), pain2_fu1$ma$k, 
+       sum(pain2_fu1$pre$n1), sum(pain2_fu1$pre$n2), 
+       ifelse(pain2_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu1$ma$I2, format='f', digits=0),'%')),
+       tpain2_fu1$b[[4,7]], 
+       'Suppl Fig #13')
+
+
+f1 <- c(paste0(unique(pain2_fu2$pre$intervention), ' vs ', unique(pain2_fu2$pre$comparison), ' (',
+        paste0(unique(pain2_fu2$pre$followup)), ') '), pain2_fu2$ma$k, 
+       sum(pain2_fu2$pre$n1), sum(pain2_fu2$pre$n2), 
+       ifelse(pain2_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu2$ma$I2, format='f', digits=0),'%')),
+       tpain2_fu2$b[[4,7]], 
+       'Suppl Fig #13')
+g1 <- c(paste0(unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$comparison), ' (',
+        paste0(unique(pain2_fu3$pre$followup)), ') '), pain2_fu3$ma$k, 
+       sum(pain2_fu3$pre$n1), sum(pain2_fu3$pre$n2), 
+       ifelse(pain2_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu3$ma$I2, format='f', digits=0),'%')),
+       tpain2_fu3$b[[4,7]], 
+       'Suppl Fig #13')
+
+                  
+
+h1 <- c(paste0(unique(pain3_fu1$pre$intervention), ' vs ', unique(pain3_fu1$pre$comparison), ' (',
+        paste0(unique(pain3_fu1$pre$followup)), ') '), pain3_fu1$ma$k, 
+       sum(pain3_fu1$pre$n1), sum(pain3_fu1$pre$n2), 
+       ifelse(pain3_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu1$ma$I2, format='f', digits=0),'%')),
+       tpain3_fu1$b[[8,6]], 
+       'Suppl Fig #14')
+i1 <- c(paste0(unique(pain3_fu2$pre$intervention), ' vs ', unique(pain3_fu2$pre$comparison), ' (',
+        paste0(unique(pain3_fu2$pre$followup)), ') '), pain3_fu2$ma$k, 
+       sum(pain3_fu2$pre$n1), sum(pain3_fu2$pre$n2), 
+       ifelse(pain3_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu2$ma$I2, format='f', digits=0),'%')),
+       tpain3_fu2$b[[7,6]], 
+       'Suppl Fig #15')
+j1 <- c(paste0(unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$comparison), ' (',
+        paste0(unique(pain3_fu3$pre$followup)), ') '), pain3_fu3$ma$k, 
+       sum(pain3_fu3$pre$n1), sum(pain3_fu3$pre$n2), 
+       ifelse(pain3_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu3$ma$I2, format='f', digits=0),'%')),
+       tpain3_fu3$b[[7,6]], 
+       'Suppl Fig #16')
+
+
+
+k1 <- c('C. Mean hospital length of stay (days)', rep(NA, 6))
+l1 <- c(paste0(unique(hospital1$intervention), ' vs ', unique(hospital1$comparison)), hospital1_md$ma$k, 
+       sum(hospital1$n1), sum(hospital1$n2), 
+       ifelse(hospital1_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital1_md$ma$I2, format='f', digits=0),'%')),
+       thospital1$b[[4,6]], 
+       'Suppl Fig #17')
+m1 <- c(paste0(unique(hospital2$intervention), ' vs ', unique(hospital2$comparison)), hospital2_md$ma$k, 
+       sum(hospital2$n1), sum(hospital2$n2), 
+       ifelse(hospital2_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital2_md$ma$I2, format='f',                digits=0),'%')),
+       thospital2$b[[9,6]], 
+       'Suppl Fig #18')
+
+
+
+
+
+head4 <- c('Recipient patients', rep(NA, 6))
+
+
+n1 <- c('D. Mean peak AST levels (UI/L)', rep(NA, 6))
+o1 <- c(paste0(unique(ast3$intervention), ' vs ', unique(ast3$comparison)), ast3_md$ma$k, 
+       sum(ast3$n1), sum(ast3$n2), 
+       ifelse(ast3_md$ma$k == 1, paste('NA'), paste0(formatC(ast3_md$ma$I2, format='f', digits=0),'%')),
+       tast3$b[[4,6]], 
+       'Suppl Fig #19')
+
+
+
+p1 <- c('E. Mean bilirubin levels (mg/dL)', rep(NA, 6))
+q1 <- c(paste0(unique(bil3$intervention), ' vs ', unique(bil3$comparison)), bil3_md$ma$k, 
+       sum(bil3$n1), sum(bil3$n2), 
+       ifelse(bil3_md$ma$k == 1, paste0('NA'), paste0(formatC(bil3_md$ma$I2, format='f', digits=0),'%')),
+       tbil3$b[[4,6]], 
+       'Suppl Fig #20')
+
+
+r1 <- c('F. Mean hospital length of stay (days)', rep(NA, 6))
+s1 <- c(paste0(unique(hospital3$intervention), ' vs ', unique(hospital3$comparison)), hospital3_md$ma$k, 
+       sum(hospital3$n1), sum(hospital3$n2), 
+       ifelse(hospital3_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital3_md$ma$I2, format='f', digits=0),'%')),
+       thospital3$b[[4,6]], 
+       'Suppl Fig #21')
+t1 <- c(paste0(unique(hospital4$intervention), ' vs ', unique(hospital4$comparison)), hospital4_md$ma$k, 
+       sum(hospital4$n1), sum(hospital4$n2), 
+       ifelse(hospital4_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital4_md$ma$I2, format='f',                digits=0),'%')),
+       thospital4$b[[7,6]], 
+       'Suppl Fig #22')
+
+
+
+
+
+overall2 <- rbind(title, NA, NA, head3, NA, a1, b1, c1, NA, d1, e1, f1, g1, h1, i1, j1, NA, k1, l1, m1, NA, NA, head4, NA, n1, o1, NA, p1, q1, NA, r1, s1, t1, NA)
+overall2 <- as.data.frame(overall2)
+
+rownames(overall2) <- NULL
+
+
+
+sub3 <- c(7,8,11:16, 19,20, 26, 29, 32, 33) 
+overall2[,1][sub3] <- paste("       ",overall2[,1][sub3])
+
+sub4 <- c(6,10,18,25,28, 31) 
+overall2[,1][sub4] <- paste("   ",overall2[,1][sub4])
+
+
+
+toverall2 <- rbind(NA, NA, NA, NA, NA, NA, tbil1$c[4,], tbil2$c[8,],
+                  NA, NA, tpain2_fu1$c[4,], tpain2_fu2$c[4,], tpain2_fu3$c[4,],
+                  tpain3_fu1$c[8,], tpain3_fu2$c[7,], tpain3_fu3$c[7,],
+                  NA, NA, thospital1$c[4,], thospital2$c[9,],
+                  NA, NA, NA, NA, NA, tast3$c[4,], 
+                  NA, NA, tbil3$c[4,], 
+                  NA, NA, thospital3$c[4,], thospital4$c[7,], NA)
+
+
+toverall2 <- structure(list(
+          mean = c(toverall2$mean),
+          lower = c(toverall2$lower),
+          upper = c(toverall2$upper)),
+          .Names = c("mean", "lower", "upper"),
+          row.names = c(NA, (-1L*nrow(toverall2))),
+          class = "data.frame")
+
+
+plot2 <- forestplot(overall2,
+             graph.pos = 6,
+             zero = 0,
+             toverall2,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
+             lineheight=unit(0.7,'cm'),
+             boxsize = 0.5,
+             line.margin = 2,
+             is.summary = c(T, rep(F,2), T, F, T, rep(F,3), T, rep(F,7), T, rep(F,3), 
+                            F, T, F, T, rep(F,2), T, rep(F,2), T, rep(F,3)),
+             align = c('l', rep('c',4), 'l'),
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
+                              ticks = gpar(cex = 0.9, fontface="bold"),
+                              summary = gpar(cex = 0.9),
+                              xlab = gpar(cex=0.9)),
+             xticks = c(-7,-5,-1,0,1,5,7),
+             xlog=FALSE,
+             clip = c(-7, 7),
+             grid = c(-7,-5,-1,0,1,5,7),
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             lwd.zero = 2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
+
+```
+
+
+
+**Supplementary information for figure 3**
+<details><summary>Suppl. figure 11: Mean peak total bilirubin levels (mg/dL) after RLDRH vs LADRH</summary>
+
+```{r bilirubin1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tbil1$b,
+                      numbers = tbil1$c,
+                      fpPosition = ncol(tbil1$b),
+                      xtick = c(-2,-1,0, 1,2),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+</details>
+
+
+<details><summary>Suppl. figure 12: Mean peak total bilirubin levels (mg/dL) after RLDRH vs ODRH</summary>
+
+```{r bilirubin2, fig.height=3, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tbil2$b,
+                      numbers = tbil2$c,
+                      fpPosition = ncol(tbil2$b)-1,
+                      xtick = c(-2,-1,0, 1,2),
+                      sizes = c(rep(NA,3), 0.02*(bil2_md$pre$weights),NA, 1, NA),
+                      bolding = c(T, rep(F, 6), T, F),
+                      aligning = c('l', rep('c', 4), 'l', 'l'))
+```
+</details>
+
+<details><summary>Suppl. figure 13: Mean pain scores (VAS) after RLDRH vs LADRH</summary>
+
+```{r pain2, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
 b <- rbind(tpain2_fu1$b[c(1:4),], 
            tpain2_fu2$b[c(3,4),],
            tpain2_fu3$b[c(3:5),])
@@ -944,89 +1073,13 @@ plot <- plotmd_single_studies(words = b,
                       aligning = c('l', 'l', rep('c', 4), 'l'))
 
 ```
-
-
 </details>
 
 
 
-<details><summary> Supp Fig 12: RLDRH versus ODRH - Difference in mean pain scores (VAS) at day 0-1 </summary>
-<p>
-```{r pain3_analysis, fig.height=3, fig.width=18, echo=FALSE, message=FALSE, warning=FALSE}
-pain2 <- subset(pain, comparison=='ODRH')
-
-
-pain3_fu1 <- subset(pain2, followup=='day 0-1')
-pain3_fu1 <- md(pain3_fu1)
-tpain3_fu1 <- table_md(analysis = pain3_fu1, nstudies = 3, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow=FALSE)
-
-
-pain3_fu2 <- subset(pain2, followup=='day 2-3')
-pain3_fu2 <- md(pain3_fu2)
-tpain3_fu2 <- table_md(analysis = pain3_fu2, nstudies = 3, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow=FALSE)
-
-
-
-pain3_fu3 <- subset(pain2, followup=='day >3')
-pain3_fu3 <- md(pain3_fu3)
-tpain3_fu3 <- table_md(analysis = pain3_fu3, nstudies = 3, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Pain score (VAS)', col = 'Mean (SD)', follow=FALSE)
-
-
-words <- rbind(tpain3_fu1$b[c(1:3,8),],
-               tpain3_fu2$b[c(6,7),],
-               tpain3_fu3$b[c(6:8),])
-words[1,1] <- 'Follow-up'
-words[4,1] <- 'Day 0-1'
-words[6,1] <- 'Day 2-3'
-words[8,1] <- 'Day >3'
-
-words <- words[,-c(3,5,7)]
-nstudies <- c(paste('Number','\n','of studies'), NA, NA, pain3_fu1$ma$k.all,
-              NA, pain3_fu2$ma$k.all, 
-              NA, pain3_fu3$ma$k.all, 
-              NA)
-i2 <- c('I2', NA, NA, paste(formatC(pain3_fu1$ma$I2, digits=0, format="f"), '%'),
-        NA, paste(formatC(pain3_fu2$ma$I2, digits=0, format="f"), '%'),
-        NA, paste(formatC(pain3_fu3$ma$I2, digits=0, format="f"), '%'), 
-        NA)
-
-b <- cbind(words[1], nstudies, words[c(2,3)], i2, words[4])
-
-colnames(b) <- NULL
-
-
-c <- rbind(tpain3_fu1$c[c(1:3,8),],
-               tpain3_fu2$c[c(6,7),],
-               tpain3_fu3$c[c(6:8),])
-
-
-numbers <- structure(list(
-          mean = c(c$mean),
-          lower = c(c$lower),
-          upper = c(c$upper)),
-          .Names = c("mean", "lower", "upper"),
-          row.names = c(NA, (-1L*nrow(c))),
-          class = "data.frame")
-
-plot <- plotmd_single_studies(words = b, 
-                              numbers = c, 
-                              fpPosition = ncol(b),
-                      xtick = c(-2, -1, -0.5, 0, 0.5, 1, 2),
-                      sizes = c(rep(NA,3), rep(c(1,NA),3)),
-                      bolding = c(T, F, F, rep(c(T, F), 3)),
-                      aligning = c('l', rep('c', 4), 'l'))
-
-```
-
+<details><summary>Suppl. figure 14: Mean pain scores (VAS) at day 0-1 after RLDRH vs ODRH</summary>
 
 ```{r pain2_followup1, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
-
 plot <- plotmd_single_studies(words = tpain3_fu1$b, 
                               numbers = tpain3_fu1$c, 
                               fpPosition = ncol(tpain3_fu1$b)-1,
@@ -1039,7 +1092,7 @@ plot <- plotmd_single_studies(words = tpain3_fu1$b,
 </p>
 </details>
 
-<details><summary> Supp Fig 13: RLDRH versus ODRH - Difference in pain scores (VAS) at day 2-3 </summary>
+<details><summary>Suppl. figure 15:  Mean pain scores (VAS) at day 2-3 after RLDRH vs ODRH</summary>
 <p>
 ```{r pain2_followup2, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
 plot <- plotmd_single_studies(words = tpain3_fu2$b, 
@@ -1054,7 +1107,7 @@ plot <- plotmd_single_studies(words = tpain3_fu2$b,
 </p>
 </details>
   
-<details><summary> Supp Fig 14: RLDRH versus ODRH - Difference in pain scores (VAS) at day greater than 3 </summary>
+<details><summary>Suppl. figure 16: Mean pain scores (VAS) at day >3 after RLDRH vs ODRH</summary>
 <p>
 ```{r pain2_followup3, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
 plot <- plotmd_single_studies(words = tpain3_fu3$b, 
@@ -1069,26 +1122,10 @@ plot <- plotmd_single_studies(words = tpain3_fu3$b,
 </p>
 </details>
 
-<br />
 
-
-
-
-### Supplementary figure 15
-<details><summary><b>Show figure</b> - Difference in mean length of hospital stay (days) after RLDRH versus LADRH</summary>
+<details><summary>Suppl. figure 17: Mean length of hospital stay (days) after RLDRH vs LADRH</summary>
 
 ```{r hospital1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
-hospital <- subset(h1, outcome=='Hospital stay')
-hospital1 <- subset(hospital, comparison=='LADRH')
-
-hospital1_md <- md(hospital1)
-
-thospital1 <- table_md(analysis = hospital1_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "LADRH (n)",
-                    outcome = 'Length of stay (days)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
 plot <- plotmd_single_studies(words = thospital1$b,
                       numbers = thospital1$c,
                       fpPosition = ncol(thospital1$b),
@@ -1100,21 +1137,9 @@ plot <- plotmd_single_studies(words = thospital1$b,
 </details>
 
 
-
-### Supplementary figure 16
-<details><summary><b>Show figure</b> - Difference in mean length of hospital stay (days) after RLDRH versus ODRH</summary>
+<details><summary>Suppl. figure 18: Mean length of hospital stay (days) after RLDRH vs ODRH</summary>
 
 ```{r hospital2, fig.height=3, fig.width=16, echo=FALSE, message=FALSE, warning=FALSE}
-hospital2 <- subset(hospital, comparison=='ODRH')
-
-hospital2_md <- md(hospital2)
-
-thospital2 <- table_md(analysis = hospital2_md, nstudies = 3, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Length of stay (days)', col = 'Mean (SD)')
-
-
-
 plot <- plotmd_single_studies(words = thospital2$b,
                       numbers = thospital2$c,
                       fpPosition = ncol(thospital2$b)-1,
@@ -1127,160 +1152,67 @@ plot <- plotmd_single_studies(words = thospital2$b,
 </details>
 
 
+<details><summary>Suppl. figure 19: Mean AST peak levels (U/L) after RLDRH vs ODRH</summary>
 
-
-
-
-# Overall2
-```{r overall_continuous_donor2, fig.height=6, fig.width=17, echo=FALSE, message=FALSE, warning=FALSE}
-
-a2 <- c('Outcome', 'N of studies', 
-       'Amr1 (n)', 'Arm2 (n)', 
-       'I2', 
-       paste0('Mean Difference (MD)','\n','95%CI'), 
-       paste0('Figure with','\n', 'Detailed Information'))
-
-
-n <- c('A. Mean bilirubin levels (mg/dL)', rep(NA, 6))
-o <- c(paste0(unique(bil1$intervention), ' vs ', unique(bil1$comparison)), bil1_md$ma$k, 
-       sum(bil1$n1), sum(bil1$n2), 
-       ifelse(bil1_md$ma$k == 1, paste0('NA'), paste0(formatC(bil1_md$ma$I2, format='f', digits=0),'%')),
-       tbil1$b[[4,6]], 
-       'Suppl Fig #9')
-p <- c(paste0(unique(bil2$intervention), ' vs ', unique(bil2$comparison)), bil2_md$ma$k, 
-       sum(bil2$n1), sum(bil2$n2), 
-       ifelse(bil2_md$ma$k == 1, paste0('NA'), paste0(formatC(bil2_md$ma$I2, format='f',                digits=0),'%')),
-       tbil2$b[[8,6]], 
-       'Suppl Fig #10')
-
-
-q <- c('B. Mean pain scores (VAS)', rep(NA, 6))
-
-
-
-r <- c(paste0(unique(pain2_fu1$pre$intervention), ' vs ', unique(pain2_fu1$pre$comparison), ' (',
-        paste0(unique(pain2_fu1$pre$followup)), ') '), pain2_fu1$ma$k, 
-       sum(pain2_fu1$pre$n1), sum(pain2_fu1$pre$n2), 
-       ifelse(pain2_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu1$ma$I2, format='f', digits=0),'%')),
-       tpain2_fu1$b[[4,7]], 
-       'Suppl Fig #11')
-
-
-s <- c(paste0(unique(pain2_fu2$pre$intervention), ' vs ', unique(pain2_fu2$pre$comparison), ' (',
-        paste0(unique(pain2_fu2$pre$followup)), ') '), pain2_fu2$ma$k, 
-       sum(pain2_fu2$pre$n1), sum(pain2_fu2$pre$n2), 
-       ifelse(pain2_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu2$ma$I2, format='f', digits=0),'%')),
-       tpain2_fu2$b[[4,7]], 
-       'Suppl Fig #11')
-t <- c(paste0(unique(pain2_fu3$pre$intervention), ' vs ', unique(pain2_fu3$pre$comparison), ' (',
-        paste0(unique(pain2_fu3$pre$followup)), ') '), pain2_fu3$ma$k, 
-       sum(pain2_fu3$pre$n1), sum(pain2_fu3$pre$n2), 
-       ifelse(pain2_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain2_fu3$ma$I2, format='f', digits=0),'%')),
-       tpain2_fu3$b[[4,7]], 
-       'Suppl Fig #11')
-
-                  
-
-u <- c(paste0(unique(pain3_fu1$pre$intervention), ' vs ', unique(pain3_fu1$pre$comparison), ' (',
-        paste0(unique(pain3_fu1$pre$followup)), ') '), pain3_fu1$ma$k, 
-       sum(pain3_fu1$pre$n1), sum(pain3_fu1$pre$n2), 
-       ifelse(pain3_fu1$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu1$ma$I2, format='f', digits=0),'%')),
-       tpain3_fu1$b[[8,6]], 
-       'Suppl Fig #12')
-v <- c(paste0(unique(pain3_fu2$pre$intervention), ' vs ', unique(pain3_fu2$pre$comparison), ' (',
-        paste0(unique(pain3_fu2$pre$followup)), ') '), pain3_fu2$ma$k, 
-       sum(pain3_fu2$pre$n1), sum(pain3_fu2$pre$n2), 
-       ifelse(pain3_fu2$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu2$ma$I2, format='f', digits=0),'%')),
-       tpain3_fu2$b[[7,6]], 
-       'Suppl Fig #13')
-w <- c(paste0(unique(pain3_fu3$pre$intervention), ' vs ', unique(pain3_fu3$pre$comparison), ' (',
-        paste0(unique(pain3_fu3$pre$followup)), ') '), pain3_fu3$ma$k, 
-       sum(pain3_fu3$pre$n1), sum(pain3_fu3$pre$n2), 
-       ifelse(pain3_fu3$ma$k == 1, paste0('NA'), paste0(formatC(pain3_fu3$ma$I2, format='f', digits=0),'%')),
-       tpain3_fu3$b[[7,6]], 
-       'Suppl Fig #14')
-
-
-
-x <- c('C. Mean hospital length of stay (days)', rep(NA, 6))
-y <- c(paste0(unique(hospital1$intervention), ' vs ', unique(hospital1$comparison)), hospital1_md$ma$k, 
-       sum(hospital1$n1), sum(hospital1$n2), 
-       ifelse(hospital1_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital1_md$ma$I2, format='f', digits=0),'%')),
-       thospital1$b[[4,6]], 
-       'Suppl Fig #15')
-z <- c(paste0(unique(hospital2$intervention), ' vs ', unique(hospital2$comparison)), hospital2_md$ma$k, 
-       sum(hospital2$n1), sum(hospital2$n2), 
-       ifelse(hospital2_md$ma$k == 1, paste0('NA'), paste0(formatC(hospital2_md$ma$I2, format='f',                digits=0),'%')),
-       thospital2$b[[9,6]], 
-       'Suppl Fig #16')
-
-overall2 <- rbind(a2,n,o,p,q,r,s,t,u,v,w,x,y,z)
-overall2 <- as.data.frame(overall2)
-
-rownames(overall2) <- NULL
-
-overall2 <- overall2 %>% add_row(.after = 1)
-overall2 <- overall2 %>% add_row(.after = 1)
-
-overall2 <- overall2 %>% add_row(.after = 6)
-overall2 <- overall2 %>% add_row(.after = 14)
-overall2 <- overall2 %>% add_row(.after = 18)
-
-
-sub1 <- c(5,6,9:14,17,18) 
-overall2[,1][sub1] <- paste("      ",overall2[,1][sub1])
-
-
-
-toverall2 <- rbind(NA, NA, NA, NA, tbil1$c[4,], tbil2$c[8,],
-                  NA, NA, tpain2_fu1$c[4,], tpain2_fu2$c[4,], tpain2_fu3$c[4,],
-                  tpain3_fu1$c[8,], tpain3_fu2$c[7,], tpain3_fu3$c[7,],
-                  NA, NA, thospital1$c[4,], thospital2$c[9,], NA)
-
-
-toverall2 <- structure(list(
-          mean = c(toverall2$mean),
-          lower = c(toverall2$lower),
-          upper = c(toverall2$upper)),
-          .Names = c("mean", "lower", "upper"),
-          row.names = c(NA, (-1L*nrow(toverall2))),
-          class = "data.frame")
-
-
-plot2 <- forestplot(overall2,
-             graph.pos = 6,
-             zero = 0,
-             toverall2,
-             new_page = TRUE,
-             colgap = unit(5, "mm"),
-             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
-             lineheight=unit(0.7,'cm'),
-             boxsize = 0.5,
-             line.margin = 2,
-             is.summary = c(T, rep(F,2), T, rep(F,3), T, rep(F, 7), T, rep(F,3)),
-             align = c('l', rep('c',4), 'l'),
-             ci.vertices = TRUE,
-             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
-                              ticks = gpar(cex = 0.9, fontface="bold"),
-                              summary = gpar(cex = 0.9),
-                              xlab = gpar(cex=0.9)),
-             xticks = c(-2, -1, 0, 1, 2),
-             xlog=FALSE,
-             clip = c(0.2, 32),
-             grid = c(-2, -1, 0, 1, 2),
-             lwd.xaxis = 1,
-             lwd.ci = 2.2,
-             lwd.zero = 2,
-             graphwidth = unit(10,"cm"),
-             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
-
+```{r ast_ODRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tast3$b,
+                      numbers = tast3$c,
+                      fpPosition = ncol(tast3$b),
+                      xtick = c(-2,-1,0,1,2),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
 ```
 
+</details>
+
+
+<details><summary>Suppl. figure 20: Mean peak total bilirubin levels after RLDRH vs ODRH</summary>
+
+```{r bilirubin_ODRH_recipient, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = tbil3$b,
+                      numbers = tbil3$c,
+                      fpPosition = ncol(tbil3$b),
+                      xtick = c(-2,-1, 0, 1,2),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+
+</details>
+
+
+<details><summary>Suppl. figure 21: Mean length of hospital stay (days) after RLDRH vs LADRH</summary>
+
+```{r hospitalstay_LADRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = thospital3$b,
+                      numbers = thospital3$c,
+                      fpPosition = ncol(thospital3$b),
+                      xtick = c(-20, -10, -5, 0, 5, 10, 20),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 4), 'l'))
+```
+</details>
+
+
+<details><summary>Suppl. figure 22: Mean length of hospital stay (days) after RLDRH vs ODRH</summary>
+
+```{r hospitalstay_ODRH_recipient, fig.height=3, fig.width=16, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotmd_single_studies(words = thospital4$b,
+                      numbers = thospital4$c,
+                      fpPosition = ncol(thospital4$b)-1,
+                      xtick = c(-20, -10, -5, 0, 5, 10, 20),
+                      sizes = c(rep(NA,3), 0.005*(hospital4_md$pre$weights+50), NA, 1,NA),
+                      bolding = c(T, rep(F, 5), T, F),
+                      aligning = c('l', rep('c', 4), 'l', 'l'))
+```
+</details>
 
 
 
 
-```{r cleaning_dichotomous_donor, echo=FALSE, message=FALSE, warning=FALSE}
+```{r analysis_dichotomous_donor, echo=FALSE, message=FALSE, warning=FALSE}
 d <- read.csv("6 Extracted Data/outcome_dichotomous_donor.csv")
 d$outcomes2 <- paste(d$outcomes, d$definition)
 d$comparison[d$comparison == 'NR'] <- NA
@@ -1293,9 +1225,7 @@ names(d2)[12] <- "e1"
 names(d2)[13] <- "e2"
 
 d2$comparison[d2$comparison == 'ORLDH'] <- 'ODRH'
-
 d2[,c(9:13)] <- lapply(d2[,c(9:13)], as.numeric)
-
 
 d2$author <- 
   ifelse(d2$refid==9, paste("Rho et al., 2020"),
@@ -1306,199 +1236,39 @@ d2$author <-
   ifelse(d2$refid==239, paste("Martucci et al., 2013"),
   ifelse(d2$refid==277, paste("Giulianotti et al., 2011"), NA)))))))
 
-```
 
 
 
-
-
-### Figure 16
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo I-II at 30 days after RLDRH versus LADRH</summary>
-
-```{r LADRH_complication1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+#CD I-II RLDRH vs LADRH
 compLADRH <- subset(d2, comparison=='LADRH')
-
 comp1 <- subset(compLADRH, definition=='I-II')
-
 comp1_rr <- rr(comp1)
-
 tcomp1 <- table_rr(analysis = comp1_rr, nstudies = 1, 
                     int = "RLDRH", comp = "LADRH",
                     outcome = 'Complications I-II')
-
-
-plot <- plotrr_single_studies(words = tcomp1$b,
-                      numbers = tcomp1$c,
-                      fpPosition = ncol(tcomp1$b),
-                      xtick = c(0.2,0.5,1,2,4),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 2), 'l'))
-```
-</details>
-
-
-
-### Figure 17
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo III-IV at 30 days after RLDRH versus LADRH</summary>
-
-
-```{r LADRH_complication2, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
-comp2 <- subset(compLADRH, definition=='III-IV')
-
-comp2_rr <- rr(comp2)
-
-tcomp2 <- table_rr(analysis = comp2_rr, nstudies = 1, 
-                    int = "RLDRH", comp = "LADRH",
-                    outcome = 'Complications III-IV')
-
-
-plot <- plotrr_single_studies(words = tcomp2$b,
-                      numbers = tcomp2$c,
-                      fpPosition = ncol(tcomp2$b),
-                      xtick = c(0.06, 0.25,0.5,1,2,4, 16),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 2), 'l'))
-```
-</details>
-
-
-
-### Figure 18
-<details><summary><b>Show figure</b> - Risk of postoperative Clevien-Dindo complications I-II at 30 days after RLDRH versus ODRH</summary>
-
-```{r ODRH_complication1, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+#CD I-II RLDRH vs ODRH
 compODRH <- subset(d2, comparison=='ODRH')
-
 comp3 <- subset(compODRH, definition=='I-II')
-
 comp3_rr <- rr(comp3)
-
 tcomp3 <- table_rr(analysis = comp3_rr, nstudies = 2, 
                     int = "RLDRH", comp = "ODRH",
                     outcome = 'Complications I-II')
-
-
-plot <- plotrr_single_studies(words = tcomp3$b,
-                      numbers = tcomp3$c,
-                      fpPosition = ncol(tcomp3$b),
-                      xtick = c(0.12,0.25,0.5,1,2,4,8),
-                      sizes = c(rep(NA,3), 0.008*(comp3_rr$pre$weights+50), NA, 1, NA),
-                      bolding = c(T, rep(F, 6), T, F),
-                      aligning = c('l', rep('c', 2), 'l', 'l'))
-```
-
-
-</details>
-
-
-
-### Figure 19
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
-
-```{r ODRH_complication2, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+#CD III-IV RLDRH vs LADRH
+comp2 <- subset(compLADRH, definition=='III-IV')
+comp2_rr <- rr(comp2)
+tcomp2 <- table_rr(analysis = comp2_rr, nstudies = 1, 
+                    int = "RLDRH", comp = "LADRH",
+                    outcome = 'Complications III-IV')
+#CD III-IV RLDRH vs ODRH
 comp4 <- subset(compODRH, definition=='III-IV')
-
 comp4_rr <- rr(comp4)
-
 tcomp4 <- table_rr(analysis = comp4_rr, nstudies = 2, 
                     int = "RLDRH", comp = "ODRH",
                     outcome = 'Complications III-IV')
-
-
-plot <- plotrr_single_studies(words = tcomp4$b,
-                      numbers = tcomp4$c,
-                      fpPosition = ncol(tcomp4$b),
-                      xtick = c(0.06,0.25,1,4,16),
-                      sizes = c(rep(NA,3), 0.008*(comp4_rr$pre$weights+50), NA, 1, NA),
-                      bolding = c(T, rep(F, 6), T, F),
-                      aligning = c('l', rep('c', 2), 'l', 'l'))
-```
-</details>
-
-
-## Summary of forest plots - *Recipient Patients*
-
-
-### Figure 20
-<details><summary><b>Show figure</b> - Difference in mean length of hospital stay (days) after RLDRH versus LADRH</summary>
-
-```{r hospitalstay_LADRH_recipient, fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-hospital3 <- subset(e2, comparison=='LADRH')
-
-hospital3_md <- md(hospital3)
-
-thospital3 <- table_md(analysis = hospital3_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "LADRH (n)",
-                    outcome = 'Length of stay (days)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = thospital3$b,
-                      numbers = thospital3$c,
-                      fpPosition = ncol(thospital3$b),
-                      xtick = c(-20, -10, -5, 0, 5, 10, 20),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-</details>
-
-
-
-### Figure 21
-<details><summary><b>Show figure</b> - Difference in mean length of hospital stay (days) after RLDRH versus ODRH</summary>
-
-```{r hospitalstay_ODRH_recipient, fig.height=3, fig.width=16, echo=FALSE, message=FALSE, warning=FALSE}
-hospital4 <- subset(e2, comparison=='ODRH' & outcome=='Hospital stay')
-
-hospital4_md <- md(hospital4)
-
-thospital4 <- table_md(analysis = hospital4_md, nstudies = 3, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Length of stay (days)', col = 'Mean (SD)')
-
-plot <- plotmd_single_studies(words = thospital4$b,
-                      numbers = thospital4$c,
-                      fpPosition = ncol(thospital4$b)-1,
-                      xtick = c(-20, -10, -5, 0, 5, 10, 20),
-                      sizes = c(rep(NA,3), 0.005*(hospital4_md$pre$weights+50), NA, 1,NA),
-                      bolding = c(T, rep(F, 5), T, F),
-                      aligning = c('l', rep('c', 4), 'l', 'l'))
 ```
 
 
-</details>
-
-
-
-### Figure 25
-<details><summary><b>Show figure</b> - Difference in mean peak total bilirubin levels after RLDRH versus ODRH</summary>
-
-```{r bilirubin_ODRH_recipient, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
-bil3 <- subset(e2, comparison=='ODRH' & outcome=='Peak Total Bilirubin')
-
-bil3_md <- md(bil3)
-
-tbil3 <- table_md(analysis = bil3_md, nstudies = 1, 
-                    int = "RLDRH (n)", comp = "ODRH (n)",
-                    outcome = 'Peak Total Bilirubin (mg/dL)', col = 'Mean (SD)', 
-                    follow = FALSE)
-
-
-plot <- plotmd_single_studies(words = tbil3$b,
-                      numbers = tbil3$c,
-                      fpPosition = ncol(tbil3$b),
-                      xtick = c(-2,-1, 0, 1,2),
-                      sizes = c(rep(NA,3), 1, NA),
-                      bolding = c(T, rep(F, 2), T, F),
-                      aligning = c('l', rep('c', 4), 'l'))
-```
-
-
-```{r cleaning_dichotomous_recipient, echo=FALSE, message=FALSE, warning=FALSE}
+```{r analysis_dichotomous_recipient, echo=FALSE, message=FALSE, warning=FALSE}
 f <- read.csv("6 Extracted Data/outcome_dichotomous_recipient.csv")
 f$outcomes2 <- ifelse(is.na(f$definition), paste0(f$outcomes), paste(f$outcomes, f$definition))
 f$comparison[f$comparison == 'NR'] <- NA
@@ -1526,25 +1296,202 @@ f2$author <-
 
 f2LADRH <- subset(f2, comparison=='LADRH')
 f2ODRH <- subset(f2, comparison=='ODRH')
-```
 
-
-</details>
-
-
-### Figure 26
-<details><summary><b>Show figure</b> - Mortality risk at 30 days after RLDRH versus LADRH</summary>
-
-```{r mortality_LADRH,  fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
+#Mortality RLDRH vs LADRH
 mortality1 <- subset(f2LADRH, outcomes=='Mortality')
-
 mortality1_rr <- rr(mortality1)
-
 tmortality1 <- table_rr(analysis = mortality1_rr, nstudies = 1, 
                     int = "RLDRH", comp = "LADRH",
                     outcome = 'Mortality')
+#Mortality RLDRH vs ODRH
+mortality2 <- subset(f2ODRH, outcomes=='Mortality')
+mortality2_rr <- rr(mortality2)
+tmortality2 <- table_rr(analysis = mortality2_rr, nstudies = 3, 
+                    int = "RLDRH", comp = "ODRH",
+                    outcome = 'Mortality')
 
 
+#CD I-II RLDRH vs LADRH
+complications3 <- subset(f2LADRH, outcomes2=='Postoperative complications I-II')
+complications3_rr <- rr(complications3)
+tcomplications3 <- table_rr(analysis = complications3_rr, nstudies = 1, 
+                    int = "RLDRH", comp = "LADRH",
+                    outcome = 'Complications')
+#CD I-II RLDRH vs ODRH
+complications4 <- subset(f2ODRH, outcomes2=='Postoperative complications I-II')
+complications4_rr <- rr(complications4)
+tcomplications4 <- table_rr(analysis = complications4_rr, nstudies = 3, 
+                    int = "RLDRH", comp = "ODRH",
+                    outcome = 'Complications I-II')
+#CD III-IV RLDRH vs LADRH
+complications5 <- subset(f2LADRH, outcomes2=='Postoperative complications III-IV')
+complications5_rr <- rr(complications5)
+tcomplications5 <- table_rr(analysis = complications5_rr, nstudies = 1, 
+                    int = "RLDRH", comp = "LADRH",
+                    outcome = 'Complications III-IV')
+#CD III-IV RLDRH vs ODRH
+complications6 <- subset(f2ODRH, outcomes2=='Postoperative complications III-IV')
+complications6_rr <- rr(complications6)
+tcomplications6 <- table_rr(analysis = complications6_rr, nstudies = 3, 
+                    int = "RLDRH", comp = "ODRH",
+                    outcome = 'Complications III-IV')
+```
+
+
+
+# Figure 4: Dichotomous outcomes
+```{r overall_dichotomous, fig.height=7, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+
+title2 <- c('Outcome', 'N of studies', 
+            paste0('Arm 1','\n', '(n/N)'),
+            paste0('Arm 2','\n', '(n/N)'),
+            'I2', 
+            paste0('Relative Risk (RR)','\n','95%CI'), 
+            paste0('Figure with','\n', 'Detailed Information'))
+  
+
+head4 <- c('Mortality Risk in Recipient Patients', rep(NA, 6))
+
+b2 <- c(paste0(unique(mortality1$intervention), ' vs ', unique(mortality1$comparison)), mortality1_rr$ma$k, 
+       tmortality1$b[[4,2]], tmortality1$b[[4,3]], 
+       ifelse(mortality1_rr$ma$k == 1, paste0('na'), paste0(formatC(mortality1_rr$ma$I2, format='f', digits=0),'%')),
+       tmortality1$b[[4,4]], 
+       'Suppl Fig #23')
+c2 <- c(paste0(unique(mortality2$intervention), ' vs ', unique(mortality2$comparison)), mortality2_rr$ma$k, 
+       tmortality2$b[[8,2]], tmortality2$b[[8,3]], 
+       ifelse(mortality2_rr$ma$k == 1, paste0('na'), paste0(formatC(mortality2_rr$ma$I2, format='f', digits=0),'%')),
+       tmortality2$b[[8,4]], 
+       'Suppl Fig #24')
+
+
+head5 <- c('Postoperative Complications in Donor Patients', rep(NA, 6))
+
+d2 <- c('Clevien-Dindo I-II at 30 days', rep(NA, 6))
+e2 <- c(paste0(unique(comp1$intervention), ' vs ', unique(comp1$comparison)), comp1_rr$ma$k, 
+       tcomp1$b[[4,2]], tcomp1$b[[4,3]], 
+       ifelse(comp1_rr$ma$k == 1, paste0('na'), paste0(formatC(comp1_rr$ma$I2, format='f', digits=0),'%')),
+       tcomp1$b[[4,4]], 
+       'Suppl Fig #25')
+
+f2 <- c(paste0(unique(comp3$intervention), ' vs ', unique(comp3$comparison)), comp3_rr$ma$k, 
+       tcomp3$b[[8,2]], tcomp3$b[[8,3]], 
+       ifelse(comp3_rr$ma$k == 1, paste0('na'), paste0(formatC(comp3_rr$ma$I2, format='f', digits=0),'%')),
+       tcomp3$b[[8,4]], 
+       'Suppl Fig #26')
+
+
+g2 <- c('Clevien-Dindo III-IV at 30 days', rep(NA, 6))
+h2 <- c(paste0(unique(comp2$intervention), ' vs ', unique(comp2$comparison)), comp2_rr$ma$k, 
+       tcomp2$b[[4,2]], tcomp2$b[[4,3]], 
+       ifelse(comp2_rr$ma$k == 1, paste0('na'), paste0(formatC(comp2_rr$ma$I2, format='f', digits=0),'%')),
+       tcomp2$b[[4,4]], 
+       'Suppl Fig #27')
+i2 <- c(paste0(unique(comp4$intervention), ' vs ', unique(comp4$comparison)), comp4_rr$ma$k, 
+       tcomp4$b[[8,2]], tcomp4$b[[8,3]], 
+       ifelse(comp4_rr$ma$k == 1, paste0('na'), paste0(formatC(comp4_rr$ma$I2, format='f', digits=0),'%')),
+       tcomp4$b[[8,4]], 
+       'Suppl Fig #28')
+
+
+
+head6 <- c('Postoperative Complications in Recipient Patients', rep(NA, 6))
+
+j2 <- c('Clevien-Dindo I-II at 30 days', rep(NA, 6))
+k2 <- c(paste0(unique(complications3$intervention), ' vs ', unique(complications3$comparison)), complications3_rr$ma$k, 
+       tcomplications3$b[[4,2]], tcomplications3$b[[4,3]], 
+       ifelse(complications3_rr$ma$k == 1, paste0('na'), 
+              paste0(formatC(complications3_rr$ma$I2, format='f', digits=0),'%')),
+       tcomplications3$b[[4,4]], 
+       'Suppl Fig #29')
+
+l2 <- c(paste0(unique(complications4$intervention), ' vs ', unique(complications4$comparison)), complications4_rr$ma$k, 
+       tcomplications4$b[[8,2]], tcomplications4$b[[8,3]], 
+       ifelse(complications4_rr$ma$k == 1, paste0('na'), 
+              paste0(formatC(complications4_rr$ma$I2, format='f', digits=0),'%')),
+       tcomplications4$b[[8,4]], 
+       'Suppl Fig #30')
+
+
+m2 <- c('Clevien-Dindo III-IV at 30 days', rep(NA, 6))
+n2 <- c(paste0(unique(complications5$intervention), ' vs ', unique(complications5$comparison)), complications5_rr$ma$k, 
+       tcomplications5$b[[4,2]], tcomplications5$b[[4,3]], 
+       ifelse(complications5_rr$ma$k == 1, paste0('na'), 
+              paste0(formatC(complications5_rr$ma$I2, format='f', digits=0),'%')),
+       tcomplications5$b[[4,4]], 
+       'Suppl Fig #31')
+
+o2 <- c(paste0(unique(complications6$intervention), ' vs ', unique(complications6$comparison)), complications6_rr$ma$k, 
+       tcomplications6$b[[8,2]], tcomplications6$b[[8,3]], 
+       ifelse(complications6_rr$ma$k == 1, paste0('na'), 
+              paste0(formatC(complications6_rr$ma$I2, format='f', digits=0),'%')),
+       tcomplications6$b[[8,4]], 
+       'Suppl Fig #32')
+
+
+
+
+overall3 <- rbind(title2, NA, NA, head4, b2, c2, NA, NA,
+                  head5, d2, e2, f2, g2, h2, i2, NA, NA,
+                  head6, j2, k2, l2, m2, n2, o2, NA)
+rownames(overall3) <- NULL
+
+sub5 <- c(5,6,11,12,14,15,20,21,23,24) 
+overall3[,1][sub5] <- paste("       ",overall3[,1][sub5])
+
+sub6 <- c(10,13,19,22) 
+overall3[,1][sub6] <- paste("   ",overall3[,1][sub6])
+
+
+
+toverall3 <- rbind(NA, NA, NA, NA, tmortality1$c[4,], tmortality2$c[8,], NA, NA,
+                   NA, NA, tcomp1$c[4,], tcomp3$c[8,], NA, tcomp2$c[4,], tcomp4$c[8,], NA, NA,
+                   NA, NA,tcomplications3$c[4,], tcomplications4$c[8,], NA, 
+                   tcomplications5$c[4,], tcomplications6$c[8,], NA)
+
+
+toverall3 <- structure(list(
+          mean = c(toverall3$mean),
+          lower = c(toverall3$lower),
+          upper = c(toverall3$upper)),
+          .Names = c("mean", "lower", "upper"),
+          row.names = c(NA, (-1L*nrow(toverall3))),
+          class = "data.frame")
+
+
+plot3 <- forestplot(overall3,
+             graph.pos = 6,
+             zero = 1,
+             toverall3,
+             new_page = TRUE,
+             colgap = unit(5, "mm"),
+             hrzl_lines = list("3" = gpar (lwd=1, columns=c(1:8), col="black")),
+             lineheight=unit(0.7,'cm'),
+             boxsize = 0.5,
+             line.margin = 2,
+             is.summary = c(T, rep(F,2), T, rep(F, 4), T, T,  rep(F,2), T, rep(F,4), 
+                            T, T,  rep(F,2), T,  rep(F,3)),
+             align = c('l', rep('c',4), 'l'),
+             ci.vertices = TRUE,
+             txt_gp = fpTxtGp(label =gpar (cex=0.9), 
+                              ticks = gpar(cex = 0.9, fontface="bold"),
+                              summary = gpar(cex = 0.9),
+                              xlab = gpar(cex=0.9)),
+             xticks = c(0.2, 0.5, 2, 4),
+             xlog=TRUE,
+             clip = c(0.2, 4),
+             grid = c(0.2, 0.5, 2, 4),
+             lwd.xaxis = 1,
+             lwd.ci = 2.2,
+             lwd.zero = 2,
+             graphwidth = unit(10,"cm"),
+             col=fpColors(box="black",line="grey", zero = 'dodgerblue4', axes="grey20", summary="black"))
+
+```
+
+**Supplementary information for figure 4**
+<details><summary>Suppl. figure 23: Mortality risk at 30 days after RLDRH vs LADRH</summary>
+
+```{r mortality_LADRH,  fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
 plot <- plotrr_single_studies(words = tmortality1$b,
                       numbers = tmortality1$c,
                       fpPosition = ncol(tmortality1$b),
@@ -1553,25 +1500,12 @@ plot <- plotrr_single_studies(words = tmortality1$b,
                       bolding = c(T, rep(F, 2), T, F),
                       aligning = c('l', rep('c', 2), 'l'))
 ```
-
-
 </details>
 
 
-
-### Figure 27
-<details><summary><b>Show figure</b> - Mortality risk at 30 days after RLDRH versus ODRH</summary>
+<details><summary>Suppl. figure 24: Mortality risk at 30 days after RLDRH vs ODRH</summary>
 
 ```{r mortality_ODRH_recipient,  fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
-mortality2 <- subset(f2ODRH, outcomes=='Mortality')
-
-mortality2_rr <- rr(mortality2)
-
-tmortality2 <- table_rr(analysis = mortality2_rr, nstudies = 3, 
-                    int = "RLDRH", comp = "ODRH",
-                    outcome = 'Mortality')
-
-
 plot <- plotrr_single_studies(words = tmortality2$b,
                       numbers = tmortality2$c,
                       fpPosition = ncol(tmortality2$b),
@@ -1583,19 +1517,66 @@ plot <- plotrr_single_studies(words = tmortality2$b,
 </details>
 
 
-### Figure 28
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo I-II at 30 days after RLDRH versus LADRH</summary>
+
+<details><summary>Suppl. figure 25: Clevien-Dindo I-II at 30 days after RLDRH vs LADRH</summary>
+
+```{r LADRH_complication1, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotrr_single_studies(words = tcomp1$b,
+                      numbers = tcomp1$c,
+                      fpPosition = ncol(tcomp1$b),
+                      xtick = c(0.2,0.5,1,2,4),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 2), 'l'))
+```
+</details>
+
+
+<details><summary>Suppl. figure 26: Clevien-Dindo complications I-II at 30 days after RLDRH vs ODRH</summary>
+
+```{r ODRH_complication1, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotrr_single_studies(words = tcomp3$b,
+                      numbers = tcomp3$c,
+                      fpPosition = ncol(tcomp3$b),
+                      xtick = c(0.12,0.25,0.5,1,2,4,8),
+                      sizes = c(rep(NA,3), 0.008*(comp3_rr$pre$weights+50), NA, 1, NA),
+                      bolding = c(T, rep(F, 6), T, F),
+                      aligning = c('l', rep('c', 2), 'l', 'l'))
+```
+</details>
+
+
+<details><summary>Suppl. figure 27: Clevien-Dindo III-IV at 30 days after RLDRH vs LADRH</summary>
+
+```{r LADRH_complication2, fig.height=3, fig.width=14, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotrr_single_studies(words = tcomp2$b,
+                      numbers = tcomp2$c,
+                      fpPosition = ncol(tcomp2$b),
+                      xtick = c(0.06, 0.25,0.5,1,2,4, 16),
+                      sizes = c(rep(NA,3), 1, NA),
+                      bolding = c(T, rep(F, 2), T, F),
+                      aligning = c('l', rep('c', 2), 'l'))
+```
+</details>
+
+
+<details><summary>Suppl. figure 28: Clevien-Dindo III-IV at 30 days after RLDRH vs ODRH</summary>
+
+```{r ODRH_complication2, fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
+plot <- plotrr_single_studies(words = tcomp4$b,
+                      numbers = tcomp4$c,
+                      fpPosition = ncol(tcomp4$b),
+                      xtick = c(0.06,0.25,1,4,16),
+                      sizes = c(rep(NA,3), 0.008*(comp4_rr$pre$weights+50), NA, 1, NA),
+                      bolding = c(T, rep(F, 6), T, F),
+                      aligning = c('l', rep('c', 2), 'l', 'l'))
+```
+</details>
+
+
+<details><summary>Suppl. figure 29: Clevien-Dindo I-II at 30 days after RLDRH vs LADRH</summary>
 
 ```{r complciationsI_LADRH_recipient,  fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-complications3 <- subset(f2LADRH, outcomes2=='Postoperative complications I-II')
-
-complications3_rr <- rr(complications3)
-
-tcomplications3 <- table_rr(analysis = complications3_rr, nstudies = 1, 
-                    int = "RLDRH", comp = "LADRH",
-                    outcome = 'Complications')
-
-
 plot <- plotrr_single_studies(words = tcomplications3$b,
                       numbers = tcomplications3$c,
                       fpPosition = ncol(tcomplications3$b),
@@ -1609,19 +1590,9 @@ plot <- plotrr_single_studies(words = tcomplications3$b,
 </details>
 
 
-### Figure 29
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo I-II at 30 days after RLDRH versus ODRH</summary>
+<details><summary>Suppl. figure 30: Clevien-Dindo I-II at 30 days after RLDRH vs ODRH</summary>
 
 ```{r complicationsI_ODRH_recipient,  fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
-complications4 <- subset(f2ODRH, outcomes2=='Postoperative complications I-II')
-
-complications4_rr <- rr(complications4)
-
-tcomplications4 <- table_rr(analysis = complications4_rr, nstudies = 3, 
-                    int = "RLDRH", comp = "ODRH",
-                    outcome = 'Complications I-II')
-
-
 plot <- plotrr_single_studies(words = tcomplications4$b,
                       numbers = tcomplications4$c,
                       fpPosition = ncol(tcomplications4$b),
@@ -1633,24 +1604,12 @@ plot <- plotrr_single_studies(words = tcomplications4$b,
 </details>
 
 
-
-### Figure 30
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo III-IV at 30 days after RLDRH versus LADRH</summary>
-
+<details><summary>Suppl. figure 31: Clevien-Dindo III-IV at 30 days after RLDRH VS LADRH</summary>
 
 ```{r complicationsIII_LADRH_recipient,  fig.height=3, fig.width=13, echo=FALSE, message=FALSE, warning=FALSE}
-complications4 <- subset(f2LADRH, outcomes2=='Postoperative complications III-IV')
-
-complications4_rr <- rr(complications4)
-
-tcomplications4 <- table_rr(analysis = complications4_rr, nstudies = 1, 
-                    int = "RLDRH", comp = "LADRH",
-                    outcome = 'Complications III-IV')
-
-
-plot <- plotrr_single_studies(words = tcomplications4$b,
-                      numbers = tcomplications4$c,
-                      fpPosition = ncol(tcomplications4$b),
+plot <- plotrr_single_studies(words = tcomplications5$b,
+                      numbers = tcomplications5$c,
+                      fpPosition = ncol(tcomplications5$b),
                       xtick = c( 0.25,0.5,1,2,4),
                       sizes = c(rep(NA,3), 1, NA),
                       bolding = c(T, rep(F, 2), T, F),
@@ -1660,28 +1619,15 @@ plot <- plotrr_single_studies(words = tcomplications4$b,
 
 </details>
 
-
-
-### Figure 31
-<details><summary><b>Show figure</b> - Risk of postoperative complications Clevien-Dindo III-IV at 30 days after RLDRH versus ODRH</summary>
+<details><summary>Suppl. figure 32: Clevien-Dindo III-IV at 30 days after RLDRH vs ODRH</summary>
 
 ```{r complicationsIII_ODRH_recipient,  fig.height=3, fig.width=15, echo=FALSE, message=FALSE, warning=FALSE}
-complications5 <- subset(f2ODRH, outcomes2=='Postoperative complications III-IV')
-
-complications5_rr <- rr(complications5)
-
-tcomplications5 <- table_rr(analysis = complications5_rr, nstudies = 3, 
-                    int = "RLDRH", comp = "ODRH",
-                    outcome = 'Complications III-IV')
-
-
-plot <- plotrr_single_studies(words = tcomplications5$b,
-                      numbers = tcomplications5$c,
-                      fpPosition = ncol(tcomplications5$b),
+plot <- plotrr_single_studies(words = tcomplications6$b,
+                      numbers = tcomplications6$c,
+                      fpPosition = ncol(tcomplications6$b),
                       xtick = c( 0.12,0.25,0.5,1,2,4, 8),
-                      sizes = c(rep(NA,3), 0.005*(complications5_rr$pre$weights+50), NA, 1, NA),
+                      sizes = c(rep(NA,3), 0.005*(complications6_rr$pre$weights+50), NA, 1, NA),
                       bolding = c(T, rep(F, 6), T, F),
                       aligning = c('l', rep('c', 2), 'l', 'l'))
 ```
-
 </details>
